@@ -1,0 +1,248 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{dsfont}
+\usepackage[french]{babel}
+\usepackage{tikz-cd}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{wrapfig}
+\usepackage{accents}
+\usepackage[backend=biber]{biblatex}
+\usepackage[ruled,vlined]{algorithm2e}
+
+\title{Algorithmes à signature pour le calcul des bases de Gröbner non-commutatives}
+\author{Arthur Léonard}
+\date{2021}
+
+\newtheorem*{thm}{Théorème}
+\newtheorem*{lem}{Lemme}
+\newtheorem*{fact}{Fait}
+\newtheorem*{dfn}{Définition}
+\newtheorem*{cor}{Corollaire}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\chev}[1]{\langle #1 \rangle}
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\CR}{\K[\M\times\{1, \dots, m\}\times\M]}
+
+\newcommand{\Ind}{\mathds{1}}
+\DeclareMathOperator{\LM}{LM}
+\DeclareMathOperator{\LC}{LC}
+\DeclareMathOperator{\LT}{LT}
+\DeclareMathOperator{\Sig}{Sig}
+\DeclareMathOperator{\supp}{supp}
+\SetKw{Break}{break}
+\SetKw{Continue}{continue}
+\SetKwInOut{Input}{Entrée}
+\SetKwInOut{Output}{Résultat}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+
+\section*{Définitions}
+Commençons par adapter les différentes définitions au cadre non-commutatif.
+Soit $\K$ un corps, on se place dans $\A = \K \chev{X_1, \dots, X_n}$, l'ensemble des polynômes non-commutatifs à $n$ variables à coefficients dans $\K$. On note~: 
+$$\M := \{X_{i_1}X_{i_2} \dots X_{i_k} \;|\; k \in \N, (i_1, i_2, \dots, i_k) \in \{1, \dots, n\}^k \}$$
+l'ensemble des monômes non-commutatifs. On fixe un ordre monomial $\leq$, c'est à dire un bon ordre sur $\M$ qui vérifie~:
+\begin{itemize}
+\item $\forall A \in \M, 1 \leq A$
+\item $\forall A, B \in \M, (A \leq B \implies \forall M \in \M, AM \leq BM)$
+\item $\forall A, B \in \M, (A \leq B \implies \forall M \in \M, MA \leq MB)$
+\end{itemize}
+Pour $f = \sum_{M \in \M} \alpha_M M \in A$, on notera~:
+\begin{itemize}
+\item $\LM(f) := \sup \{ M \in \M \;|\; \alpha_M \neq 0 \}$ le monôme dominant de $f$.
+\item $\LC(f) := \alpha_{\LM(f)}$ le coefficient dominant de $f$.
+\item $\LT(f) := \LC(f)\LM(f)$ le terme dominant de $f$.
+\end{itemize}
+Soit $|$ la relation de divisibilité sur $\M$, définie par~:
+$$\forall A, B \in \M, (A \;|\; B \iff \exists L, R \in \M, LAR = B)$$
+
+\begin{dfn}[Base de Gröbner]
+	Soit $I$ un idéal de $\A$, et soit $G$ un ensemble de polynômes de $I$.
+	Si pour tout $f \in I$, il existe $g \in G$ tel que $\LM(g) \;|\; \LM(f)$, on dit que $G$ est une base de Gröbner de $I$.
+\end{dfn}
+
+\begin{fact}
+	Contrairement au cas commutatif, tous les idéaux ne sont pas finiment engendrés, et certains idéaux finiment engendrés n'ont pas de base de Gröbner finie.
+\end{fact}
+\begin{proof}
+	Si l'on savait trouver une base de Gröbner finie de tout idéal finiment engendré, on pourrait décider le problème du mot en calculant une base de Gröbner de $(A_i - B_i)_{i \in \{1, \dots, k\}}$ qui correspondent aux règles de réécriture $A_i \rightarrow B_i$. 
+	Or le problème du mot est indécidable.
+\end{proof}
+
+Soit $I$ un idéal de type fini, engendré par $g_1, \dots, g_m$, nous disposons de l'algorithme de Buchberger non-commutatif qui nous permet de calculer une base de Gröbner finie de $I$ si elle existe. Cependant, comme dans le cas commutatif, cet algorithme effectue des réductions à zéro que nous voudrions éviter.
+Nous aimerions donc adapter le concept de signature au cadre non-commutatif, afin d'obtenir un algorithme qui permette de calculer une base de Gröbner finie de $I$ si elle existe, avec peu de réductions à zéro, grâce à un théorème F5 non-commutatif.
+
+Comme nous allons le voir, les concepts s'adaptent naturellement, mais qu'il est difficile de garantir la terminaison d'un algorithme à signature.
+
+\begin{dfn}[Chemins de réduction]
+	On appelle $\CR$ l'ensemble des chemins de réduction.
+	Cet ensemble est muni d'une structure naturelle de $\A$-bimodule et d'un morphisme 
+	\begin{align*}
+		E : \CR &\rightarrow \A \\
+		\sum_{(l, i, r) \in \M\times\{1,\dots,m\}\times\M} \alpha_{(l,i,r)}(l,i,r) &\mapsto \sum_{(l, i, r) \in \M\times\{1,\dots,m\}\times\M} \alpha_{(l,i,r)}lg_ir
+	\end{align*}
+\end{dfn}
+
+Soit $\leq$ un ordre sur $\M\times\{1,\dots,m\}\times\M$ compatible avec la multiplication à gauche et à droite par un élément de $\M$.
+Pour 
+$$\sigma = \sum_{(l, i, r) \in \M\times\{1,\dots,m\}\times\M} \alpha_{(l,i,r)}(l,i,r) \in \CR,$$
+on notera~:
+\begin{itemize}
+\item $\LM(\sigma) := \sup \{ (l, i, r) \in \M\times\{1,\dots,m\}\times\M \;|\; \alpha_{(l, i, r)} \neq 0 \}$ le monôme dominant de $\sigma$.
+\item $\LC(\sigma) := \alpha_{\LM(\sigma)}$ le coefficient dominant de $\sigma$.
+\item $\LT(\sigma) := \LC(\sigma)\LM(\sigma)$ le terme dominant de $\sigma$.
+\end{itemize}
+
+\begin{dfn}[Sigpolynômes]
+	On note :
+	$$M := \{(\sigma, f) \in \CR\times\A \;|\; E(\sigma) = f\}$$
+	Les élements de $M$ sont appelés sigpolynômes.
+	Les premières composantes des élements de $M$ de second membre nul sont appelés syzygies.
+	
+	Pour $p = (\sigma, f) \in \CR\times\A$, on notera :
+	\begin{itemize}
+	\item $\LM(p) := \LM(f)$ le monôme dominant de $p$.
+	\item $\Sig(p) := \LM(\sigma)$ la signature de $p$.
+	\end{itemize}
+\end{dfn}
+
+\begin{dfn}[Réduction en tête]
+	On dit que le sigpolynôme $(\sigma, f)$ est réductible en tête par le sigpolynôme $(\sigma', f')$ si on est dans l'un des cas suivants :
+	\begin{itemize}
+	\item $f' = 0$ et il existe $l, r \in \M$ tels que $\LM(\sigma) = l\LM(\sigma')r$.
+	\item Il existe $l, r \in \M$ tels que $\LM(f) = l\LM(f')r$ et $l\LM(\sigma')r \leq \LM(\sigma)$.
+	\end{itemize}
+\end{dfn}
+
+Les algorithmes à signatures calculent tous une base de Gröbner forte :
+
+\begin{dfn}[Base de Gröbner forte]
+	Une base de Gröbner forte de $M$ est un sous-ensemble $G_f$ de $M$ tel que tout élément non-nul de $M$ est réductible en tête par un élément de $G_f$.
+\end{dfn}
+
+L'intérêt de regarder une base de Gröbner forte est le théorème suivant~:
+
+\begin{thm}[Théorème de projection]
+	Soit $G_f$ une base de Gröbner forte de $M$, alors :
+	$$\pi_2(G_f) := \{v \;|\; (u, v) \in M\}$$
+	est une base de Gröbner de $I$.
+\end{thm}
+\begin{proof}
+	Soit $f \in I$ non-nul. Par définition, il existe donc $\sigma \in \CR$ tel que $E(\sigma) = f$, d'où $(\sigma, f) \in M$. Choisissons un $\sigma$ tel que $\LM(\sigma)$ soit minimal.
+	Comme $G_f$ est une base de Gröbner forte de $M$, il existe $(\sigma', f') \in G_f$ tel que $(\sigma, f)$ est réductible en tête par $(\sigma', f')$.
+	Si $f' = 0$, alors il existe $l, r \in \M$ tel que $\LM(\sigma) = l\LM(\sigma')r$, et alors :
+	$$(\sigma - \LC(\sigma)l\LM(\sigma')r, f) \in M,$$
+	ce qui contredit la minimalité de $\LM(\sigma)$.
+	
+	Si $f' \neq 0$, alors il existe $l, r \in \M$ tel que $\LM(f) = l\LM(f')r$, d'où $\LM(f') \;|\; \LM(f)$ et $\pi_2(G_f)$ est bien une base de Gröbner de $I$.
+\end{proof}
+
+L'avantage (mais aussi l'inconvénient), c'est qu'un algorithme qui calcule une base de Gröbner forte calcule aussi une base de Gröbner des syzygies.
+
+\begin{dfn}[Base de Gröbner des syzygies]
+	On dit qu'un sous-ensemble $G_s$ des syzygies est une base de Gröbner des syzygies, si pour chaque syzygie $\sigma$ non-nulle, il existe $\sigma' \in G_s$ et $l, r \in \M$ tels que $\LM(\sigma) = l\LM(\sigma')r$.
+\end{dfn}
+
+\begin{fact}
+Lorsque l'on considère les premières composantes des sigpolynômes de seconde composante nulle d'une base de Gröbner forte, on obtient une base de Gröbner des syzygies.
+\end{fact}
+
+Il se trouve que l'on connaît déjà de nombreuses syzygies :
+
+\begin{dfn}[Syzygies principales]
+	On appelle syzygie principale une syzygie qui est dans le sous-$\A$-bimodule de $\CR$ engendré par les :
+	$$g_i(X, j, 1) - (1, i, X)g_j, X \in \M, (i, j) \in \{1, \dots, m\}^2$$
+	On dira que la suite $(g_1, \dots, g_m)$ est régulière s'il n'y a pas d'autres syzygies que les syzygies principales.
+	
+\end{dfn}
+
+Par exemple, prenons $g_1 = ba - ab, g_2 = b^3$, avec pour ordres deglex et poslexdeglex.
+Les générateurs des syzygies principales sont de la forme :
+\begin{align*}
+& (1, 2, Xba) - (1, 2, Xab) - (b^3X, 1, 1) \\
+& (baX, 2, 1) - (abX, 2, 1) - (1, 1, Xb^3) \\
+& (b^3X, 2, 1) - (1, 2, Xb^3) \\
+& (baX, 1, 1) - (abX, 1, 1) - (1, 1, Xba) + (1, 1, Xab) \\
+\end{align*}
+Pour n'importe quel $X \in \M$.
+
+Remarquons que l'on peut construire d'autres syzygies principales à partir des ces générateurs :
+Par exemple, si on multiplie le deuxième gérateur par $b^2$ à gauche et qu'on fait le remplacement $X \rightarrow aX$ dans la troisième relation, on obtient~:
+$$(b^2abX, 2, 1) - (1, 2, aXb^3) + (b^2, 1, Xb^3) $$
+En simplifiant par la deuxième relation, on obtient :
+$$(bab^2X, 2, 1) - (1, 2, aXb^3) + (b^2, 1, Xb^3) + (b, 1, bXb^3)$$
+Et en resimplifiant par la deuxième relation, on obtient :
+$$(ab^3X, 2, 1) - (1, 2, aXb^3) + (b^2, 1, Xb^3) + (b, 1, bXb^3) + (1, 1, b^2Xb^3)$$
+On peut alors simplifier par la troisième relation, on obtient :
+$$(a, 2, Xb^3) - (1, 2, aXb^3) + (b^2, 1, Xb^3) + (b, 1, bXb^3) + (1, 1, b^2Xb^3)$$
+Qui donne un nouveau type de monôme dominant. Cet approche peut-être systématisée en un algorithme à la Knuth-Bendix.
+
+Un algorithme à signature "naïf" ferait exactement la même chose que GVW dans le nouveau langage :
+Il commence avec les paires $\{((1, i, 1), g_i) \;|\; 1 \leq i \leq m\}$, puis à chaque étape choisit la paire critique de plus petite signature, la réduit régulièrement par les paires déjà ajoutées, puis l'ajoute aux paires existantes, en ignorant éventuellement des paires dont la signature est un monôme dominant de syzygie principale.
+Dans le cas d'une suite régulière, un algorithme à signature déterminerait donc d'une manière ou d'une autre les monômes dominants des syzygies principales. Dans le cas commutatif, cette base est finie, et même très simple à caractériser : dans le cas incrémental, il s'agit des monômes qui sont divisibles par un des monômes dominants de la base de Gröbner $G_0$.
+En revanche, dans le cas non-commutatif, les syzygies ne sont pas forcément de type fini, ce qui nous empêche de faire cet algorithme naïf. Pour que notre algorithme ait une chance de terminer, il faut réussir à au moins traiter les syzygies principales de manière différente.
+
+\subsection*{Exemple de calcul de syzygies}
+
+Considérons l'exemple $g_1 = b^2, g_2 = ba - ab$, avec pour ordre deglex d'un côté, et avec pour ordres deglex et l'ordre de concaténation, où
+nous avons $(l, i, r) \leq (l', j, r')$ si l'une des conditions ci-desous est vérifiée~:
+\begin{itemize}
+	\item $l\LM(g_i)r < l'\LM(g_j)r'$
+	\item $l\LM(g_i)r = l'\LM(g_j)r'$ et $\deg{l} \leq \deg{l'}$
+	\item $l\LM(g_i)r = l'\LM(g_j)r'$ et $\deg{l} = \deg{l'}$ et $i \leq j$.
+\end{itemize}
+
+Nous cherchons à déterminer les monômes dominants des syzygies.
+\begin{fact}
+	Les monômes dominants des syzygies sont les paires $(l, i, r)$ dont $l$ contient au moins un $b$.
+\end{fact}
+\begin{proof}
+	Soit $\sigma$ une syzygie non-nulle.
+	
+	Commençons par montrer que tous les monômes dominants des syzygies contiennent un $b$ à gauche.
+	
+	On construit un graphe $G$ de la manière suivante~:
+	\begin{itemize}
+		\item Les sommets de $G$ sont les 
+		$$\{l(ba)r \;|\; (l, 2, r) \in \supp(\sigma)\} \cup \{l(ab)r \;|\; (l, 2, r) \in \supp(\sigma)\} \cup \{l(bb)r \;|\; (l, 1, r) \in \supp(\sigma)\}$$
+		
+		\item Pour chaque terme $\alpha(l, 2, r)$ de $\sigma$, on ajoute un arc entre $l(ba)r$ et $l(ab)r$ de pondération $\alpha$.
+		\item Chaque sommet $w$ est étiqueté 
+		$$\sum_{\alpha (l, 1, r) \mbox{ terme de } \sigma, w = l(b^2)r} \alpha$$
+		\item Le fait que $\sigma$ est une syzygie implique que pour chaque sommet $v$, la somme de la pondération de $v$, de la pondération des arcs qui sortent de $v$, moins la pondération des arcs qui entre dans $v$ est nulle. Appellons cette propriété "équation d'équilibre" en $v$.
+	\end{itemize}
+	
+	Soit $s$ le sommet de $G$ le plus grand pour l'ordre monomial, par propriétés de l'ordre de concaténation, il n'y a pas d'arc qui entre dans $s$.
+	
+	Distinguons deux cas~:
+	\begin{itemize}
+	\item Le monôme dominant de $\sigma$ est de la forme $(l, 1, r)$. Dans ce cas, puisqu'on a choisit l'ordre de concaténation, on a $s = l(b^2)r$. Par équation d'équilibre en $s$, on obtient qu'il existe un monôme $(l', j, r')$ de $\sigma$ tel que $l'\LM(g_j)r' = l(b^2)r$.
+	Si $j = 1$, alors $l'(b^2)r' = l(b^2)r$, et comme $\deg{l'} < \deg{l}$, on obtient que $l$ doit contenir un $b$.
+	Si $j = 2$, alors $l'(ba)r' = l(b^2)r$, et comme $\deg{l'} \leq \deg{l}$, on obtient que $l$ doit contenir un $b$.
+	
+	\item Le monôme dominant de $\sigma$ est de la forme $(l, 2, r)$. Dans ce cas, puisqu'on a choisit l'ordre de concaténation, on a $s = l(ba)r$. Par équation d'équilibre en $s$, on obtient qu'il existe un monôme $(l', j, r')$ de $\sigma$ tel que $l'\LM(g_j)r' = l(ba)r$.
+	Si $j = 1$, alors $l'(b^2)r' = l(ba)r$, et comme $\deg{l'} \leq \deg{l}$, on obtient que $l$ doit contenir un $b$.
+	Si $j = 2$, alors $l'(ba)r' = l(ba)r$, et comme $\deg{l'} < \deg{l}$, on obtient que $l$ doit contenir un $b$.
+	\end{itemize}
+	
+	Réciproquement, montrons que tous les monômes contenant un $b$ à gauche.
+	Par compatibilité à la multiplication à gauche et à droite, il suffit de montrer que~:
+	$$(ba^n, 1, 1) \mbox{ et } (ba^n, 2, 1)$$
+	sont des monômes dominants des syzygies, ce qui est le cas car :
+	$$(ba^n, 1, 1) - (1, 2, a^{n - 1}b^2) - (aba^{n - 1}, 1, 1)$$
+	est une syzygie de monôme dominant $(ba^n, 1, 1)$ et
+	$$(ba^n, 2, 1) + \sum_{k = 0}^{n} (a^k, 2, a^{n - k}b) + (a^{n+1}, 1, 1) - \sum_{k = 0}^{n - 1} (a^k, 2, a^{n - 1 - k}ba) - (a^n, 1, a)$$
+	est une syzygie de monôme dominant $(ba^n, 2, 1)$.	
+\end{proof}
+
+\end{document}
+
