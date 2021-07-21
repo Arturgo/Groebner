@@ -191,7 +191,9 @@ Il commence avec les paires $\{((1, i, 1), g_i) \;|\; 1 \leq i \leq m\}$, puis �
 Dans le cas d'une suite régulière, un algorithme à signature déterminerait donc d'une manière ou d'une autre les monômes dominants des syzygies principales. Dans le cas commutatif, cette base est finie, et même très simple à caractériser : dans le cas incrémental, il s'agit des monômes qui sont divisibles par un des monômes dominants de la base de Gröbner $G_0$.
 En revanche, dans le cas non-commutatif, les syzygies ne sont pas forcément de type fini, ce qui nous empêche de faire cet algorithme naïf. Pour que notre algorithme ait une chance de terminer, il faut réussir à au moins traiter les syzygies principales de manière différente.
 
-\subsection*{Exemple de calcul de syzygies}
+\subsection*{Exemples de calcul de syzygies}
+
+\subsubsection*{Ordre TOP}
 
 Considérons l'exemple $g_1 = b^2, g_2 = ba - ab$, avec pour ordre deglex d'un côté, et avec pour ordres deglex et l'ordre de concaténation, où
 nous avons $(l, i, r) \leq (l', j, r')$ si l'une des conditions ci-desous est vérifiée~:
@@ -206,10 +208,9 @@ Nous cherchons à déterminer les monômes dominants des syzygies.
 	Les monômes dominants des syzygies sont les paires $(l, i, r)$ dont $l$ contient au moins un $b$.
 \end{fact}
 \begin{proof}
-	Soit $\sigma$ une syzygie non-nulle.
-	
 	Commençons par montrer que tous les monômes dominants des syzygies contiennent un $b$ à gauche.
 	
+	Soit $\sigma$ une syzygie non-nulle.
 	On construit un graphe $G$ de la manière suivante~:
 	\begin{itemize}
 		\item Les sommets de $G$ sont les 
@@ -234,14 +235,46 @@ Nous cherchons à déterminer les monômes dominants des syzygies.
 	Si $j = 2$, alors $l'(ba)r' = l(ba)r$, et comme $\deg{l'} < \deg{l}$, on obtient que $l$ doit contenir un $b$.
 	\end{itemize}
 	
-	Réciproquement, montrons que tous les monômes contenant un $b$ à gauche.
+	Réciproquement, montrons que tous les monômes contenant un $b$ à gauche sont des monômes dominants de syzygies.
 	Par compatibilité à la multiplication à gauche et à droite, il suffit de montrer que~:
 	$$(ba^n, 1, 1) \mbox{ et } (ba^n, 2, 1)$$
-	sont des monômes dominants des syzygies, ce qui est le cas car :
+	sont des monômes dominants des syzygies, ce qui est le cas car~:
 	$$(ba^n, 1, 1) - (1, 2, a^{n - 1}b^2) - (aba^{n - 1}, 1, 1)$$
 	est une syzygie de monôme dominant $(ba^n, 1, 1)$ et
 	$$(ba^n, 2, 1) + \sum_{k = 0}^{n} (a^k, 2, a^{n - k}b) + (a^{n+1}, 1, 1) - \sum_{k = 0}^{n - 1} (a^k, 2, a^{n - 1 - k}ba) - (a^n, 1, a)$$
 	est une syzygie de monôme dominant $(ba^n, 2, 1)$.	
+\end{proof}
+
+\subsubsection*{Ordre POT}
+
+Considérons maintenant l'exemple $g_1 = a^2, g_2 = ba - ab$, avec pour ordre deglex d'un côté, et avec pour ordres deglex et l'ordre POT, où
+nous avons $(l, i, r) \leq (l', j, r')$ si l'une des conditions ci-desous est vérifiée~:
+\begin{itemize}
+	\item $i < j$
+	\item $i = j$ et $\deg{l} \leq \deg{l'}$
+	\item $i = j$ et $\deg{l} = \deg{l'}$ et $l\LM(g_i)r < l'\LM(g_j)r'$
+\end{itemize}
+
+Nous cherchons à déterminer les monômes dominants des syzygies.
+\begin{fact}
+	Les monômes dominants des syzygies de la forme $(l, 2, 1)$ sont exactement les triplets $(l, 2, 1)$ tels que $l$ contient au moins un $a$.
+\end{fact}
+\begin{proof}
+	Soit $\sigma$ une syzygie non-nulle, dont le monôme dominant est $(l, 2, 1)$.
+	Par équation d'équilibre en $l(ba)$, on obtient qu'il doit exister un monôme $(l', j, r')$ de $\sigma$ qui doit vérifier l'une des conditions suivantes~:
+	\begin{itemize}
+	\item $j = 1$ et $l'(ba)r' = l(ba)$, comme $\deg{l'} < \deg{l}$, on obtient que $l$ doit contenir un $a$.
+	\item $j = 1$ et $l'(ab)r' = l(ba)$, comme $\deg{l'} < \deg{l}$, on obtient que $l$ doit contenir un $a$.
+	\item $j = 2$ et $l'(aa)r' = l(ba)$, dans ce cas, il est clair que $l$ doit contenir au moins un $a$.
+	\end{itemize}
+	
+	Montrons maitenant que tout élément de la forme $(l, 2, 1)$ avec $l$ contenant au moins un $a$ est un monôme dominant de syzygie.
+	Par compatibilité à la multiplication à gauche et à droite, il suffit de montrer que les~:
+	$$(ab^n, 2, 1)$$
+	sont des monômes dominants des syzygies, ce qui est le cas car~:
+	$$(b^{n + 1}, 1, 1) - \sum_{k = 0}^n (b^{n - k}, 2, b^k a)
+	- \sum_{k = 0}^n (ab^{n - k}, 2, b^k) - (1, 1, b^{n + 1})$$
+	est une syzygie de monôme dominant $(ab^n, 2, 1)$.	
 \end{proof}
 
 \end{document}
