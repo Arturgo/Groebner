@@ -46,8 +46,8 @@
 
 \section*{Introduction}
 
-\section*{Définitions}
-Commençons par adapter les différentes définitions au cadre non-commutatif.
+\section*{Algorithme de Buchberger non-commutatif}
+Commençons par adapter les différentes définitions du mémoire au cadre non-commutatif.
 Soit $\K$ un corps, on se place dans $\A = \K \chev{X_1, \dots, X_n}$, l'ensemble des polynômes non-commutatifs à $n$ variables à coefficients dans $\K$. On note~: 
 $$\M := \{X_{i_1}X_{i_2} \dots X_{i_k} \;|\; k \in \N, (i_1, i_2, \dots, i_k) \in \{1, \dots, n\}^k \}$$
 l'ensemble des monômes non-commutatifs. On fixe un ordre monomial $\leq$, c'est à dire un bon ordre sur $\M$ qui vérifie~:
@@ -78,7 +78,32 @@ $$\forall A, B \in \M, (A \;|\; B \iff \exists L, R \in \M, LAR = B)$$
 	Or le problème du mot est indécidable.
 \end{proof}
 
-Soit $I$ un idéal de type fini, engendré par $g_1, \dots, g_m$, nous disposons de l'algorithme de Buchberger non-commutatif qui nous permet de calculer une base de Gröbner finie de $I$ si elle existe. Cependant, comme dans le cas commutatif, cet algorithme effectue des réductions à zéro que nous voudrions éviter.
+Soit $I$ un idéal de type fini, engendré par $g_1, \dots, g_m$, nous disposons de l'algorithme de Buchberger non-commutatif qui nous permet de calculer une base de Gröbner finie de $I$ si elle existe. 
+
+L'algorithme de Buchberger non-commutatif est en fait très similaire à l'algorithme commutatif, à l'exception que les S-polynômes de deux polynômes $P$ et $Q$ sont de la forme $lPr - l'Qr'$, où $l, r, l', r \in \M$ sont tels que $l\LM(P)r = l'\LM(Q)r'$, $\deg{l\LM(P)} > \deg{l'}$ et $\deg{\LM(Q)r'} > \deg{r}$.
+
+Cependant, comme dans le cas commutatif, cet algorithme effectue des réductions à zéro que nous voudrions éviter.
+
+\subsection*{Exemple d'exécution}
+
+Considérons $g_1 = ts - a, g_2 = sa - at$ avec l'ordre deglex.
+On obtient dans l'ordre les S-polynômes suivants~:
+\begin{itemize}
+\item $g_1 a - t g_2 = tat - aa$, qui est irréductible, on ajoute donc $g_3 := tat - aa$ à la base de Gröbner.
+\item $g_3 s - ta g_1 = taa - aas$, qui est irréductible, on ajoute donc $g_4 := taa - aas$ à la base de Gröbner.
+\item $ta g_3 - g_3 at = -taaas + aaaa$, qui se réduit de la manière suivante~:
+$$-taaas + aaaa \rightarrow -aasas + aaaa \rightarrow -aaats + aaaa \rightarrow 0$$
+On fait donc une première réduction à $0$.
+\item $ta g_3 - g_3 at = -taaa + aaat$, qui se réduit de la manière suivante~:
+$$-taaa + aaat \rightarrow -aasa + aaat \rightarrow 0$$
+On fait donc une deuxième réduction à $0$.
+\end{itemize}
+La base de Gröbner obtenue est $(ts - a, sa - at, tat - aa, taa - aas)$.
+
+Comme il était fastidieux d'exécuter l'algorithme de Buchberger à la main sur des exemples, ce dernier a été implémenté.
+
+\section*{Signatures}
+
 Nous aimerions donc adapter le concept de signature au cadre non-commutatif, afin d'obtenir un algorithme qui permette de calculer une base de Gröbner finie de $I$ si elle existe, avec peu de réductions à zéro, grâce à un théorème F5 non-commutatif.
 
 Comme nous allons le voir, les concepts s'adaptent naturellement, mais qu'il est difficile de garantir la terminaison d'un algorithme à signature.
@@ -184,14 +209,14 @@ Et en resimplifiant par la deuxième relation, on obtient :
 $$(ab^3X, 2, 1) - (1, 2, aXb^3) + (b^2, 1, Xb^3) + (b, 1, bXb^3) + (1, 1, b^2Xb^3)$$
 On peut alors simplifier par la troisième relation, on obtient :
 $$(a, 2, Xb^3) - (1, 2, aXb^3) + (b^2, 1, Xb^3) + (b, 1, bXb^3) + (1, 1, b^2Xb^3)$$
-Qui donne un nouveau type de monôme dominant. Cet approche peut-être systématisée en un algorithme à la Knuth-Bendix.
+Qui donne un nouveau type de monôme dominant. Cette approche peut-être systématisée en un algorithme à la Knuth-Bendix.
 
 Un algorithme à signature "naïf" ferait exactement la même chose que GVW dans le nouveau langage :
-Il commence avec les paires $\{((1, i, 1), g_i) \;|\; 1 \leq i \leq m\}$, puis à chaque étape choisit la paire critique de plus petite signature, la réduit régulièrement par les paires déjà ajoutées, puis l'ajoute aux paires existantes, en ignorant éventuellement des paires dont la signature est un monôme dominant de syzygie principale.
-Dans le cas d'une suite régulière, un algorithme à signature déterminerait donc d'une manière ou d'une autre les monômes dominants des syzygies principales. Dans le cas commutatif, cette base est finie, et même très simple à caractériser : dans le cas incrémental, il s'agit des monômes qui sont divisibles par un des monômes dominants de la base de Gröbner $G_0$.
+Il commence avec les paires $\{((1, i, 1), g_i) \;|\; 1 \leq i \leq m\}$, puis à chaque étape choisit la paire critique de plus petite signature, la réduit régulièrement par les paires déjà ajoutées, puis l'ajoute aux paires existantes, en ignorant éventuellement des paires dont la signature est un monôme dominant de syzygie principale. Ce dernier algorithme a été implémenté dans une version simple, ce qui a permis d'observer qu'il terminait très rarement.
+En effet, dans le cas d'une suite régulière, un algorithme à signature déterminerait donc d'une manière ou d'une autre les monômes dominants des syzygies principales. Dans le cas commutatif, cette base est finie, et même très simple à caractériser : dans le cas incrémental, il s'agit des monômes qui sont divisibles par un des monômes dominants de la base de Gröbner $G_0$.
 En revanche, dans le cas non-commutatif, les syzygies ne sont pas forcément de type fini, ce qui nous empêche de faire cet algorithme naïf. Pour que notre algorithme ait une chance de terminer, il faut réussir à au moins traiter les syzygies principales de manière différente.
 
-\subsection*{Exemples de calcul de syzygies}
+\section*{Exemples de calcul de syzygies}
 
 \subsubsection*{Ordre TOP}
 
@@ -211,9 +236,9 @@ Nous cherchons à déterminer les monômes dominants des syzygies.
 	Commençons par montrer que tous les monômes dominants des syzygies contiennent un $b$ à gauche.
 	
 	Soit $\sigma$ une syzygie non-nulle.
-	On construit un graphe $G$ de la manière suivante~:
+	On construit un graphe $G_\sigma$ de la manière suivante~:
 	\begin{itemize}
-		\item Les sommets de $G$ sont les 
+		\item Les sommets de $G_\sigma$ sont les 
 		$$\{l(ba)r \;|\; (l, 2, r) \in \supp(\sigma)\} \cup \{l(ab)r \;|\; (l, 2, r) \in \supp(\sigma)\} \cup \{l(bb)r \;|\; (l, 1, r) \in \supp(\sigma)\}$$
 		
 		\item Pour chaque terme $\alpha(l, 2, r)$ de $\sigma$, on ajoute un arc entre $l(ba)r$ et $l(ab)r$ de pondération $\alpha$.
@@ -245,6 +270,8 @@ Nous cherchons à déterminer les monômes dominants des syzygies.
 	est une syzygie de monôme dominant $(ba^n, 2, 1)$.	
 \end{proof}
 
+Ce fait implique qu'il n'y a pas de base de Gröbner forte finie de $(g_1, g_2)$.
+
 \subsubsection*{Ordre POT}
 
 Considérons maintenant l'exemple $g_1 = a^2, g_2 = ba - ab$, avec pour ordre deglex d'un côté, et avec pour ordres deglex et l'ordre POT, où
@@ -255,17 +282,18 @@ nous avons $(l, i, r) \leq (l', j, r')$ si l'une des conditions ci-desous est v�
 	\item $i = j$ et $\deg{l} = \deg{l'}$ et $l\LM(g_i)r < l'\LM(g_j)r'$
 \end{itemize}
 
-Nous cherchons à déterminer les monômes dominants des syzygies.
+Soit $\LM_s$ l'ensemble des monômes dominants des syzygies, on cherche à déterminer $\LM_s$.
 \begin{fact}
-	Les monômes dominants des syzygies de la forme $(l, 2, 1)$ sont exactement les triplets $(l, 2, 1)$ tels que $l$ contient au moins un $a$.
+	On a~:
+	$$\LM_s \cap \{(l, 2, 1) \;|\; l \in \M\} = \{(l, 2, 1) \;|\; l \in \M, l \mbox{ contient un } a\}$$
 \end{fact}
 \begin{proof}
 	Soit $\sigma$ une syzygie non-nulle, dont le monôme dominant est $(l, 2, 1)$.
 	Par équation d'équilibre en $l(ba)$, on obtient qu'il doit exister un monôme $(l', j, r')$ de $\sigma$ qui doit vérifier l'une des conditions suivantes~:
 	\begin{itemize}
-	\item $j = 1$ et $l'(ba)r' = l(ba)$, comme $\deg{l'} < \deg{l}$, on obtient que $l$ doit contenir un $a$.
-	\item $j = 1$ et $l'(ab)r' = l(ba)$, comme $\deg{l'} < \deg{l}$, on obtient que $l$ doit contenir un $a$.
-	\item $j = 2$ et $l'(aa)r' = l(ba)$, dans ce cas, il est clair que $l$ doit contenir au moins un $a$.
+	\item $j = 2$ et $l'(ba)r' = l(ba)$, comme $\deg{l'} < \deg{l}$, on obtient que $l$ doit contenir un $a$.
+	\item $j = 2$ et $l'(ab)r' = l(ba)$, comme $\deg{l'} < \deg{l}$, on obtient que $l$ doit contenir un $a$.
+	\item $j = 1$ et $l'(aa)r' = l(ba)$, dans ce cas, il est clair que $l$ doit contenir au moins un $a$.
 	\end{itemize}
 	
 	Montrons maitenant que tout élément de la forme $(l, 2, 1)$ avec $l$ contenant au moins un $a$ est un monôme dominant de syzygie.
@@ -276,6 +304,8 @@ Nous cherchons à déterminer les monômes dominants des syzygies.
 	- \sum_{k = 0}^n (ab^{n - k}, 2, b^k) - (1, 1, b^{n + 1})$$
 	est une syzygie de monôme dominant $(ab^n, 2, 1)$.	
 \end{proof}
+
+Ce fait implique qu'il n'y a pas de base de Gröbner forte finie de $(g_1, g_2)$.
 
 \end{document}
 
