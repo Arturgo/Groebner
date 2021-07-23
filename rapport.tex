@@ -247,7 +247,7 @@ Nous cherchons à déterminer les monômes dominants des syzygies.
 		\item Le fait que $\sigma$ est une syzygie implique que pour chaque sommet $v$, la somme de la pondération de $v$, de la pondération des arcs qui sortent de $v$, moins la pondération des arcs qui entre dans $v$ est nulle. Appellons cette propriété "équation d'équilibre" en $v$.
 	\end{itemize}
 	
-	Soit $s$ le sommet de $G$ le plus grand pour l'ordre monomial, par propriétés de l'ordre de concaténation, il n'y a pas d'arc qui entre dans $s$.
+	Soit $s$ le sommet de $G_\sigma$ le plus grand pour l'ordre monomial, par propriétés de l'ordre de concaténation, il n'y a pas d'arc qui entre dans $s$.
 	
 	Distinguons deux cas~:
 	\begin{itemize}
@@ -306,6 +306,24 @@ Soit $\LM_s$ l'ensemble des monômes dominants des syzygies, on cherche à déte
 \end{proof}
 
 Ce fait implique qu'il n'y a pas de base de Gröbner forte finie de $(g_1, g_2)$.
+
+\subsubsection*{Langage régulier ?}
+Au vu de la forme des syzygies principales, et de l'algorithme pour en calculer de nouvelles, on peut se demander si un automate peut reconnaître les monômes dominants des syzygies.
+
+Ce n'est malheureusement pas le cas.
+Prenons $g_1 = sxe, g_2 = sye, g_3 = axa - x, g_4 = aya - a, g_5 = y - x$.
+
+\begin{fact}
+	
+\end{fact}
+\begin{proof}
+
+Par compatibilité à la multiplication à gauche et à droite, il suffit de montrer que les~:
+$$(sa^n, 5, a^ne)$$
+sont des monômes dominants de syzygies, ce qui est le cas car~:
+$$(sa^n, 5, a^ne) + \sum_{k = 0}^{n - 1} (sa^k, 3, a^ke) + (1, 1, 1)
+- \sum_{k = 0}^{n - 1} (sa^k, 4, a^ke) - (1, 2, 1)$$
+\end{proof}
 
 \end{document}
 
