@@ -52,7 +52,7 @@ En 1999 et 2002, Jean-Charles Faugère introduit deux algorithmes, F4 \cite{f4} 
 
 Dans le mémoire, nous avons présenté l'algorithme GVW \cite{gvw}, dans le cas particulier d'un anneau de polynômes sur un corps, avec un seul ordre monomial et l'ordre POT (Position Over Term).
 
-L'objectif du stage, et du rapport qui suit, et d'étudier comment les algorithmes à signature peuvent se généraliser au contexte non-commutatif. Nous avons adapté de nombreuses définitions en non-commutatif, mais nous nous sommes heurtés à des difficultés que nous avons essayé d'identifier au mieux. Nous avons ainsi démontré un résultat qui font montre une obstruction à la création d'un algorithme à signature non-commutatif : l'ensemble des monômes dominants des syzygies, ensemble essentiel à la création d'un algorithme à signature, n'est pas nécessairement un langage algébrique.
+L'objectif du stage, et du rapport qui suit, et d'étudier comment les algorithmes à signature peuvent se généraliser au contexte non-commutatif. Nous avons adapté de nombreuses définitions en non-commutatif, mais nous nous sommes heurtés à des difficultés que nous avons essayé d'identifier au mieux. Nous avons ainsi démontré un résultat qui font montre une obstruction à la création d'un algorithme à signature non-commutatif : l'ensemble des monômes dominants des syzygies, ensemble essentiel à la création d'un algorithme à signature, n'est pas nécessairement un langage décidable.
 
 \section*{Algorithme de Buchberger non-commutatif}
 Commençons par adapter les différentes définitions du mémoire au cadre non-commutatif.
@@ -315,12 +315,6 @@ Soit $\LM_s$ l'ensemble des monômes dominants des syzygies, on cherche à déte
 
 Ce fait implique qu'il n'y a pas de base de Gröbner forte finie de $(g_1, g_2)$.
 
-\section*{Langage décidable}
-
-Si l'ordre monomial est noetherien, il existe bien un algorithme pour décider si un triplet $(l, i, r)$ est un monôme dominant de syzygie, mais il s'avère qu'il est très peu efficace~:
-On considère l'espace vectoriel $V$ engendré par les triplets plus petits que $(l, i, r)$, qui est de dimension finie.
-Décider si $(l, i, r)$ est un monôme dominant de syzygie revient à décider s'il existe des éléments $\sigma$ de $V$ tel que le coefficient de $(l, i, r)$ dans $\sigma$ est $1$, et tel que $E(\sigma) = 0$, ce qui revient à décider si un système linéaire avec un nombre fini d'équations admet des solutions, ce qui est bien entendu décidable.
-
 \section*{Langage régulier ?}
 Au vu de la forme des syzygies principales, et de l'algorithme pour en calculer de nouvelles, on peut se demander si un automate peut reconnaître les monômes dominants des syzygies, lorsque la base de Gröbner est finie.
 Nous allons démontrer que ce n'est pas le cas, en utilisant le fait que le langage $\{a^nb^n \;|\; n \in \N\}$ n'est pas régulier.
@@ -345,7 +339,6 @@ avec pour ordre $m_1 < m_2$ si~:
 \item Il y a autant de symboles $\infty$ et de symboles $s$ dans $m_1$ que dans $m_2$, mais
 $m_1 <_{deglex} m_2$ où $a < b < c < d < x < y < z < e < t < s < \infty$.
 \end{itemize}
-On reparlera du rôle de $\infty$ plus tard.
 
 Nous avons $(l, i, r) \leq (l', j, r')$ si l'une des conditions ci-desous est vérifiée~:
 \begin{itemize}
@@ -354,6 +347,21 @@ Nous avons $(l, i, r) \leq (l', j, r')$ si l'une des conditions ci-desous est v�
 	\item $l\LM(g_i)r = l'\LM(g_j)r'$ et $i = j$ et $\deg{l} < \deg{l'}$.
 \end{itemize}
 
+L'idée est que les deux symboles $s, t, e$ sont présents aux extrémités du mot pour pouvoir faire des opérations sur le premier $a$ ou sur le dernier $b$.
+Le premier $a$ va se transformer en $c$ en générant un $x$, les autres $a$ vont absorber un $y$, et générer un $x$ en se tranformant en $c$.
+Le dernier $b$ va absorber un $x$, générer un $z$ et se transformer en $d$, les autres $b$ vont absorber un $x$, et générer un $y$ en se transformant en $d$.
+Les $x$ et les $y$ sont des "messages" qui commutent avec les $a$ et les $d$. Un $x$ "dit" à la frontière entre les $b$ et les $d$ qu'un $a$ s'est transformé en $c$, alors qu'un $y$ "dit" à la frontière entre les $a$ et les $c$ qu'un $b$ s'est transformé en $d$, l'objectif étant que pour comparer le nombre de $a$ et de $b$, il y ait autant de transformations de chaque type.
+Le $z$ est le message qui permet de retransformer les $d$ en $b$ et les $c$ en $a$ à la fin du processus. On reparlera du rôle de $\infty$ plus tard.
+
+Pour mieux comprendre, prenons $n = 2$. On a que $(1, 11, a^2b^2e)$ est un monôme dominant de syzygie car on a les réécritures suivantes~:
+\begin{align*}
+saabbe & =_{1} tcxabbe =_{2} tcaxbbe =_{6} tcadybe \\
+& =_{5} tcaydbe =_{4} tcyadbe =_{7} tccxdbe \\
+& =_{3} tccdxbe =_{8} tccddze =_{9} tccdzbe \\
+& =_{9} tcczbbe =_{10} tczabbe =_{10} tzaabbe \\
+& =_{11} saabbe
+\end{align*}
+
 \begin{fact}
 	Les monômes dominants des syzygies de la suite de polynômes précédente ne forment pas un langage régulier.
 \end{fact}
@@ -361,7 +369,7 @@ Nous avons $(l, i, r) \leq (l', j, r')$ si l'une des conditions ci-desous est v�
 Nous allons montrer que l'ensemble des monômes dominants des syzygies de la forme $(1, 11, a^nb^me)$ vérifient $n = m$. Cela conclura, puisque si l'on note $X$ l'ensemble des monômes dominants des syzygies, si $X$ était régulier, alors son intersection avec le langage régulier $\{(1, 11, a^nb^me) \;|\; n, m \geq 1\}$ devrait être régulier, or cette intersection est le langage $\{(1, 11, a^nb^ne) \;|\; n \geq 1 \}$, qui n'est clairement pas régulier par le lemme de pompage.
 
 Soit $n \geq 1$, commençons par montrer $(1, 11, a^nb^ne)$ est un monôme dominant de syzygie.
-On peut aisément vérifier que~:
+On vérifie que~:
 
 \begin{align*}
 (1, 1, a^{n-1}b^ne) & + \sum_{k = 2}^{n} (tc^{k - 2}, 7, a^{n - k}d^{k - 1}b^{n - k + 1}e) \\
@@ -377,20 +385,6 @@ On peut aisément vérifier que~:
 \end{align*}
 est une syzygie de monôme dominant $(1, 11, a^nb^ne)$.
 
-Pour mieux comprendre cette syzygie, prenons $n = 2$. On voit qu'elle correspond à la suite de réécritures suivantes~:
-\begin{align*}
-saabbe & =_{1} tcxabbe =_{2} tcaxbbe =_{6} tcadybe \\
-& =_{5} tcaydbe =_{4} tcyadbe =_{7} tccxdbe \\
-& =_{3} tccdxbe =_{8} tccddze =_{9} tccdzbe \\
-& =_{9} tcczbbe =_{10} tczabbe =_{10} tzaabbe \\
-& =_{11} saabbe
-\end{align*}
-L'idée est que les deux symboles $s, t, e$ sont présents aux extrémités du mot pour pouvoir faire des opérations sur le premier $a$ ou sur le dernier $b$.
-Le premier $a$ va se transformer en $c$ en générant un $x$, les autres $a$ vont absorber un $y$, et générer un $x$ en se tranformant en $c$.
-Le dernier $b$ va absorber un $x$, générer un $z$ et se transformer en $d$, les autres $b$ vont absorber un $x$, et générer un $y$ en se transformant en $d$.
-Les $x$ et les $y$ sont des "messages" qui commutent avec les $a$ et les $d$. Un $x$ "dit" à la frontière entre les $b$ et les $d$ qu'un $a$ s'est transformé en $c$, alors qu'un $y$ "dit" à la frontière entre les $a$ et les $c$ qu'un $b$ s'est transformé en $d$, l'objectif étant que pour comparer le nombre de $a$ et de $b$, il y ait autant de transformations de chaque type.
-Le $z$ est le message qui permet de retransformer les $d$ en $b$ et les $c$ en $a$ à la fin du processus.
-
 Soit $\sigma$ une syzygie de monôme dominant $(1, 11, a^{n}b^{m}e)$, et essayons de montrer que $n = m$.
 Soit $G$ le graphe dont les sommets sont les éléments de $M$, et pour chaque $\alpha(l, i, r)$ terme de $\sigma$, si $g_i$ s'écrit $X - Y$, on crée un arc entre $lXr$ et $lYr$.
 Alors, soit $W$ l'ensemble des sommets d'une des formes suivantes~:
@@ -403,7 +397,7 @@ Alors, soit $W$ l'ensemble des sommets d'une des formes suivantes~:
 & tc^pza^qb^re, \\
 & tc^pd^qzb^re
 \end{align*}
-Chaque sommet de $W$ ne peut être relié qu'à des sommets de $W$, et chaque sommet de $W$ est relié à au plus deux sommets. Ainsi, la composante connexe de $sa^nb^ne$ dans $\sigma$ est une chaîne ou un cycle. Comme $\sigma$ est une syzygies, il doit s'agir d'un cycle, ce qui impose $n = m$.
+Chaque sommet de $W$ ne peut être relié qu'à des sommets de $W$, et chaque sommet de $W$ est relié à au plus deux sommets. Ainsi, la composante connexe de $sa^nb^ne$ dans $\sigma$ est une chaîne ou un cycle. Comme $\sigma$ est une syzygie, il doit s'agir d'un cycle, ce qui impose $n = m$.
 
 \end{proof}
 
@@ -420,11 +414,21 @@ Le langage $Y$ n'est donc pas régulier.
 
 On a donc construit une suite de polynômes qui admet une base de Gröbner finie, mais dont l'ensemble des monômes dominants des syzygies n'est pas un langage régulier.
 
+De plus, on peut rendre l'ordre isomorphe à $\N$ en choisissant deglex et en remplaçant le symbole $\infty$ par $\infty^{10}$ et $s$ par $s^5$, car les degrés varient d'au plus une constante lors des réécritures contenues dans une syzygie.
+
 \subsubsection*{Langage algébrique ?}
 
 La question naturelle suivante est de se demander s'il existe un automate à pile qui reconnaît les monômes dominants des syzygies.
 Il se trouve que la technique de la section précédente se généralise~: on utilise le même genre de construction, en utilisant que le langage $\{a^nb^nc^n \;|\; n \in \N\}$ n'est pas algébrique.
-On en déduit que les monômes dominants de syzygies ne sont pas toujours reconnaissables par un automate à pile.
+On en déduit que les monômes dominants de syzygies ne sont pas toujours reconnaissables par un automate à pile. Comme dans le cas du langage régulier, on peut modifier l'exemple pour que l'ordre soit isomorphe à $\N$, car les degrés varient d'au plus une constante lors des réécritures contenues dans une syzygie.
+
+\section*{Langage décidable}
+
+Si l'ordre monomial est isomorphe pour les ordres à $\N$, il existe bien un algorithme pour décider si un triplet $(l, i, r)$ est un monôme dominant de syzygie, mais il s'avère qu'il est très peu efficace~:
+On considère l'espace vectoriel $V$ engendré par les triplets plus petits que $(l, i, r)$, qui est de dimension finie.
+Décider si $(l, i, r)$ est un monôme dominant de syzygie revient à décider s'il existe des éléments $\sigma$ de $V$ tel que le coefficient de $(l, i, r)$ dans $\sigma$ est $1$, et tel que $E(\sigma) = 0$, ce qui revient à décider si un système linéaire avec un nombre fini d'équations admet des solutions, ce qui est bien entendu décidable.
+
+En revanche, si l'ordre monomial n'est pas isomorphe à $\N$, alors il n'existe pas forcément d'algorithme pour décider si un triplet $(l, i, r)$ est un monôme dominant de syzygie. Nous avons en effet trouvé une construction qui ramène ce problème au problème de l'arrêt.
 
 \nocite{*}
 \printbibliography
