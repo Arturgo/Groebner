@@ -11,6 +11,7 @@
 \usepackage{accents}
 \usepackage[backend=biber]{biblatex}
 \usepackage[ruled,vlined]{algorithm2e}
+\bibliography{rapport}
 
 \title{Algorithmes à signature pour le calcul des bases de Gröbner non-commutatives}
 \author{Arthur Léonard}
@@ -45,6 +46,13 @@
 \maketitle
 
 \section*{Introduction}
+Dans les années 1960, Bruno Buchberger introduit les bases de Gröbner, et trouve un algorithme qui permet de les calculer \cite{buchberger}. Cependant, cet algorithme, basé sur des divisions polynomiales multivariées répétées, effectue de nombreuses divisions dont le reste est nul, qui ne permettent pas de découvrir des nouveaux polynômes dans la base. Pour améliorer significativement la performance des algorithmes de calcul des bases de Gröbner, de nombreux critères ont été trouvés pour éviter d'effectuer ces divisions.
+
+En 1999 et 2002, Jean-Charles Faugère introduit deux algorithmes, F4 \cite{f4} et F5 \cite{f5}. Le premier utilise de l'algèbre linéaire pour effectuer plusieurs réductions en parallèle. En revanche, le second utilise l'information donnée par les divisions à zéro, en étudiant le module des syzygies. C'est le premier algorithme à signature. L'algorithme F5 a ensuite été simplifié par Gao, Guan et Volny dans l'algorithme G2V \cite{g2v}, qui a lui-même été amélioré et généralisé par Gao, Volny et Wang en 2010 dans l'algorithme GVW.
+
+Dans le mémoire, nous avons présenté l'algorithme GVW \cite{gvw}, dans le cas particulier d'un anneau de polynômes sur un corps, avec un seul ordre monomial et l'ordre POT (Position Over Term).
+
+L'objectif du stage, et du rapport qui suit, et d'étudier comment les algorithmes à signature peuvent se généraliser au contexte non-commutatif. Nous avons adapté de nombreuses définitions en non-commutatif, mais nous nous sommes heurtés à des difficultés que nous avons essayé d'identifier au mieux. Nous avons ainsi démontré un résultat qui font montre une obstruction à la création d'un algorithme à signature non-commutatif : l'ensemble des monômes dominants des syzygies, ensemble essentiel à la création d'un algorithme à signature, n'est pas nécessairement un langage algébrique.
 
 \section*{Algorithme de Buchberger non-commutatif}
 Commençons par adapter les différentes définitions du mémoire au cadre non-commutatif.
@@ -307,23 +315,108 @@ Soit $\LM_s$ l'ensemble des monômes dominants des syzygies, on cherche à déte
 
 Ce fait implique qu'il n'y a pas de base de Gröbner forte finie de $(g_1, g_2)$.
 
-\subsubsection*{Langage régulier ?}
-Au vu de la forme des syzygies principales, et de l'algorithme pour en calculer de nouvelles, on peut se demander si un automate peut reconnaître les monômes dominants des syzygies.
+\section*{Langage décidable}
 
-Ce n'est malheureusement pas le cas.
-Prenons $g_1 = sxe, g_2 = sye, g_3 = axa - x, g_4 = aya - a, g_5 = y - x$.
+Si l'ordre monomial est noetherien, il existe bien un algorithme pour décider si un triplet $(l, i, r)$ est un monôme dominant de syzygie, mais il s'avère qu'il est très peu efficace~:
+On considère l'espace vectoriel $V$ engendré par les triplets plus petits que $(l, i, r)$, qui est de dimension finie.
+Décider si $(l, i, r)$ est un monôme dominant de syzygie revient à décider s'il existe des éléments $\sigma$ de $V$ tel que le coefficient de $(l, i, r)$ dans $\sigma$ est $1$, et tel que $E(\sigma) = 0$, ce qui revient à décider si un système linéaire avec un nombre fini d'équations admet des solutions, ce qui est bien entendu décidable.
+
+\section*{Langage régulier ?}
+Au vu de la forme des syzygies principales, et de l'algorithme pour en calculer de nouvelles, on peut se demander si un automate peut reconnaître les monômes dominants des syzygies, lorsque la base de Gröbner est finie.
+Nous allons démontrer que ce n'est pas le cas, en utilisant le fait que le langage $\{a^nb^n \;|\; n \in \N\}$ n'est pas régulier.
+Considérons les polynômes~:
+\begin{align*}
+g_1 & := sa - tcx \\
+g_2 & := xa - ax \\
+g_3 & := xd - dx \\
+g_4 & := ya - ay \\
+g_5 & := yd - dy \\
+g_6 & := xbb - dyb \\
+g_7 & := cya - ccx \\
+g_8 & := xbe - dze \\
+g_9 & := dz - zb \\
+g_{10} & := cz - za \\
+g_{11} & := tz - s
+\end{align*}
+avec pour ordre $m_1 < m_2$ si~:
+\begin{itemize}
+\item Il y a moins de symboles $\infty$ dans $m_1$ que dans $m_2$.
+\item Il y a autant de symboles $\infty$ dans $m_1$ que dans $m_2$, mais il y a moins de symboles $s$ dans $m_1$ que dans $m_2$.
+\item Il y a autant de symboles $\infty$ et de symboles $s$ dans $m_1$ que dans $m_2$, mais
+$m_1 <_{deglex} m_2$ où $a < b < c < d < x < y < z < e < t < s < \infty$.
+\end{itemize}
+On reparlera du rôle de $\infty$ plus tard.
+
+Nous avons $(l, i, r) \leq (l', j, r')$ si l'une des conditions ci-desous est vérifiée~:
+\begin{itemize}
+	\item $l\LM(g_i)r < l'\LM(g_j)r'$
+	\item $l\LM(g_i)r = l'\LM(g_j)r'$ et $i < j$
+	\item $l\LM(g_i)r = l'\LM(g_j)r'$ et $i = j$ et $\deg{l} < \deg{l'}$.
+\end{itemize}
 
 \begin{fact}
-	
+	Les monômes dominants des syzygies de la suite de polynômes précédente ne forment pas un langage régulier.
 \end{fact}
 \begin{proof}
+Nous allons montrer que l'ensemble des monômes dominants des syzygies de la forme $(1, 11, a^nb^me)$ vérifient $n = m$. Cela conclura, puisque si l'on note $X$ l'ensemble des monômes dominants des syzygies, si $X$ était régulier, alors son intersection avec le langage régulier $\{(1, 11, a^nb^me) \;|\; n, m \geq 1\}$ devrait être régulier, or cette intersection est le langage $\{(1, 11, a^nb^ne) \;|\; n \geq 1 \}$, qui n'est clairement pas régulier par le lemme de pompage.
 
-Par compatibilité à la multiplication à gauche et à droite, il suffit de montrer que les~:
-$$(sa^n, 5, a^ne)$$
-sont des monômes dominants de syzygies, ce qui est le cas car~:
-$$(sa^n, 5, a^ne) + \sum_{k = 0}^{n - 1} (sa^k, 3, a^ke) + (1, 1, 1)
-- \sum_{k = 0}^{n - 1} (sa^k, 4, a^ke) - (1, 2, 1)$$
+Soit $n \geq 1$, commençons par montrer $(1, 11, a^nb^ne)$ est un monôme dominant de syzygie.
+On peut aisément vérifier que~:
+
+\begin{align*}
+(1, 1, a^{n-1}b^ne) & + \sum_{k = 2}^{n} (tc^{k - 2}, 7, a^{n - k}d^{k - 1}b^{n - k + 1}e) \\
+& + \sum_{k = 1}^{n - 1} (tc^ka^{n - k}d^{k - 1}, 6, b^{n - k - 1}e) \\
+& + (c^nd^{n - 1}, 8, 1) \\
+& + (1, 11, a^nb^ne) \\
+& + \sum_{k = 1}^n (tc^nd^{n - k}, 9, b^{k - 1}e) \\
+& + \sum_{k = 1}^n (tc^{n - k}, 10, a^{k - 1}b^ne) \\
+& + \sum_{k = 1}^{n} \sum_{l = 0}^{n - k - 1} (tc^{k}a^{l}, 2, a^{n - l - k - 1}d^{k - 1}b^{n - k + 1} e) \\
+& + \sum_{k = 1}^{n} \sum_{l = 0}^{k - 2} (tc^{k}a^{n - k}d^l, 3, d^{k - 2 - l}b^{n - k - 1}e) \\
+& + \sum_{k = 1}^{n - 1} \sum_{l = 0}^{k - 1} (tc^{k}a^{n - k}d^l, 5, d^{k - 1 - l}b^{n - k - 2}e) \\
+& + \sum_{k = 1}^{n - 1} \sum_{l = 0}^{n - k - 1} (tc^{k}a^{l}, 4, a^{n - l - k - 1}d^{k}b^{n - k} e) \\
+\end{align*}
+est une syzygie de monôme dominant $(1, 11, a^nb^ne)$.
+
+Pour mieux comprendre cette syzygie, prenons $n = 2$. On voit qu'elle correspond à la suite de réécritures suivantes~:
+\begin{align*}
+saabbe & =_{1} tcxabbe =_{2} tcaxbbe =_{6} tcadybe \\
+& =_{5} tcaydbe =_{4} tcyadbe =_{7} tccxdbe \\
+& =_{3} tccdxbe =_{8} tccddze =_{9} tccdzbe \\
+& =_{9} tcczbbe =_{10} tczabbe =_{10} tzaabbe \\
+& =_{11} saabbe
+\end{align*}
+L'idée est que les deux symboles $s, t, e$ sont présents aux extrémités du mot pour pouvoir faire des opérations sur le premier $a$ ou sur le dernier $b$.
+Le premier $a$ va se transformer en $c$ en générant un $x$, les autres $a$ vont absorber un $y$, et générer un $x$ en se tranformant en $c$.
+Le dernier $b$ va absorber un $x$, générer un $z$ et se transformer en $d$, les autres $b$ vont absorber un $x$, et générer un $y$ en se transformant en $d$.
+Les $x$ et les $y$ sont des "messages" qui commutent avec les $a$ et les $d$. Un $x$ "dit" à la frontière entre les $b$ et les $d$ qu'un $a$ s'est transformé en $c$, alors qu'un $y$ "dit" à la frontière entre les $a$ et les $c$ qu'un $b$ s'est transformé en $d$, l'objectif étant que pour comparer le nombre de $a$ et de $b$, il y ait autant de transformations de chaque type.
+Le $z$ est le message qui permet de retransformer les $d$ en $b$ et les $c$ en $a$ à la fin du processus.
+
+Soit $\sigma$ une syzygie de monôme dominant $(1, 11, a^{n}b^{m}e)$, et essayons de montrer que $n = m$.
+Soit $G$ le graphe dont les sommets sont les éléments de $M$, et pour chaque $\alpha(l, i, r)$ terme de $\sigma$, si $g_i$ s'écrit $X - Y$, on crée un arc entre $lXr$ et $lYr$.
+ 
+
 \end{proof}
 
-\end{document}
+On pourrait remarquer que la suite de polynômes n'admet pas forcément de base de Gröbner finie.
+Cependant, grâce à l'astuce suivante, on peut transformer l'exemple précédent pour qu'il ait une base de Gröbner finie~: on ajoute $\infty$ à la suite des polynômes, et pour toute lettre $\alpha$, on ajoute $\infty - \alpha$ à la suite des polynômes.
 
+La nouvelle suite de polynômes ainsi contruite a une base de Gröbner finie ; elle contient pour tout symbole $\alpha$ le polynôme $\alpha$.
+Soit $X$ l'ensemble des monômes dominants des syzygies avant la transformation, $Y$ l'ensemble des monômes dominants des syzygies après la transformation, et $Z$ le langage~:
+$$\{(l, i, r) \in \M \times \N \times \M \;|\; l \LM(g_i) r \mbox{ ne contient pas } \infty\}$$
+On a~:
+$$X = Y \cap Z$$
+Comme $Z$ est un langage régulier, si $Y$ était un langage régulier, alors $X$ le serait aussi.
+Le langage $Y$ n'est donc pas régulier.
+
+On a donc construit une suite de polynômes qui admet une base de Gröbner finie, mais dont l'ensemble des monômes dominants des syzygies n'est pas un langage régulier.
+
+\subsubsection*{Langage algébrique ?}
+
+La question naturelle suivante est de se demander s'il existe un automate à pile qui reconnaît les monômes dominants des syzygies.
+Il se trouve que la technique de la section précédente se généralise~: on utilise le même genre de construction, en utilisant que le langage $\{a^nb^nc^n \;|\; n \in \N\}$ n'est pas algébrique.
+On en déduit que les monômes dominants de syzygies ne sont pas toujours reconnaissables par un automate à pile.
+
+\nocite{*}
+\printbibliography
+
+\end{document}
