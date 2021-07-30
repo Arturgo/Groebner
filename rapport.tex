@@ -393,7 +393,17 @@ Le $z$ est le message qui permet de retransformer les $d$ en $b$ et les $c$ en $
 
 Soit $\sigma$ une syzygie de monôme dominant $(1, 11, a^{n}b^{m}e)$, et essayons de montrer que $n = m$.
 Soit $G$ le graphe dont les sommets sont les éléments de $M$, et pour chaque $\alpha(l, i, r)$ terme de $\sigma$, si $g_i$ s'écrit $X - Y$, on crée un arc entre $lXr$ et $lYr$.
- 
+Alors, soit $W$ l'ensemble des sommets d'une des formes suivantes~:
+\begin{align*}
+& sa^nb^ne, \\
+& tc^pa^qxa^rd^nb^me, \\
+& tc^pa^qd^rxd^nb^me, \\
+& tc^pa^qya^rd^nb^me, \\
+& tc^pa^qd^ryd^nb^me, \\
+& tc^pza^qb^re, \\
+& tc^pd^qzb^re
+\end{align*}
+Chaque sommet de $W$ ne peut être relié qu'à des sommets de $W$, et chaque sommet de $W$ est relié à au plus deux sommets. Ainsi, la composante connexe de $sa^nb^ne$ dans $\sigma$ est une chaîne ou un cycle. Comme $\sigma$ est une syzygies, il doit s'agir d'un cycle, ce qui impose $n = m$.
 
 \end{proof}
 
