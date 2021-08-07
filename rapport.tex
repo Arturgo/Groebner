@@ -9,6 +9,7 @@
 \usepackage{amssymb}
 \usepackage{wrapfig}
 \usepackage{accents}
+\usepackage{url}
 \usepackage[backend=biber]{biblatex}
 \usepackage[ruled,vlined]{algorithm2e}
 \bibliography{rapport}
@@ -52,7 +53,7 @@ En 1999 et 2002, Jean-Charles Faugère introduit deux algorithmes, F4 \cite{f4} 
 
 Dans le mémoire, nous avons présenté l'algorithme GVW \cite{gvw}, dans le cas particulier d'un anneau de polynômes sur un corps, avec un seul ordre monomial et l'ordre POT (Position Over Term).
 
-L'objectif du stage, et du rapport qui suit, et d'étudier comment les algorithmes à signature peuvent se généraliser au contexte non-commutatif. Nous avons adapté de nombreuses définitions en non-commutatif, mais nous nous sommes heurtés à des difficultés que nous avons essayé d'identifier au mieux. Nous avons ainsi démontré un résultat qui font montre une obstruction à la création d'un algorithme à signature non-commutatif : l'ensemble des monômes dominants des syzygies, ensemble essentiel à la création d'un algorithme à signature, n'est pas nécessairement un langage décidable.
+L'objectif du stage, et du rapport qui suit, est d'étudier comment les algorithmes à signature peuvent se généraliser au contexte non-commutatif. Nous avons adapté de nombreuses définitions en non-commutatif, et nous avons remarqué à fortiori que nos définitions coïncidaient avec celles d'un autre article \cite{noncom}. Une fois ces définitions posées, nous nous sommes heurtés à des difficultés que nous avons essayé d'identifier au mieux. Nous avons ainsi démontré un résultat qui montre une obstruction à la création d'un algorithme à signature non-commutatif : l'ensemble des monômes dominants des syzygies, ensemble essentiel à la création d'un algorithme à signature, n'est pas nécessairement un langage décidable. En ajoutant pour contrainte que l'ordre soit isomorphe à $\N$ pour les ordres ("fair" dans \cite{noncom}), nous avons réussi à démontré que l'ensemble des monômes dominants des syzygies n'est pas algébrique.
 
 \section*{Algorithme de Buchberger non-commutatif}
 Commençons par adapter les différentes définitions du mémoire au cadre non-commutatif.
@@ -179,7 +180,7 @@ L'intérêt de regarder une base de Gröbner forte est le théorème suivant~:
 	Si $f' \neq 0$, alors il existe $l, r \in \M$ tel que $\LM(f) = l\LM(f')r$, d'où $\LM(f') \;|\; \LM(f)$ et $\pi_2(G_f)$ est bien une base de Gröbner de $I$.
 \end{proof}
 
-L'avantage (mais aussi l'inconvénient), c'est qu'un algorithme qui calcule une base de Gröbner forte calcule aussi une base de Gröbner des syzygies.
+L'avantage (mais aussi l'inconvénient) d'un algorithme qui calcule une base de Gröbner forte est qu'il calcule aussi une base de Gröbner des syzygies.
 
 \begin{dfn}[Base de Gröbner des syzygies]
 	On dit qu'un sous-ensemble $G_s$ des syzygies est une base de Gröbner des syzygies, si pour chaque syzygie $\sigma$ non-nulle, il existe $\sigma' \in G_s$ et $l, r \in \M$ tels que $\LM(\sigma) = l\LM(\sigma')r$.
@@ -220,9 +221,9 @@ $$(a, 2, Xb^3) - (1, 2, aXb^3) + (b^2, 1, Xb^3) + (b, 1, bXb^3) + (1, 1, b^2Xb^3
 Qui donne un nouveau type de monôme dominant. Cette approche peut-être systématisée en un algorithme à la Knuth-Bendix.
 
 Un algorithme à signature "naïf" ferait exactement la même chose que GVW dans le nouveau langage :
-Il commence avec les paires $\{((1, i, 1), g_i) \;|\; 1 \leq i \leq m\}$, puis à chaque étape choisit la paire critique de plus petite signature, la réduit régulièrement par les paires déjà ajoutées, puis l'ajoute aux paires existantes, en ignorant éventuellement des paires dont la signature est un monôme dominant de syzygie principale. Ce dernier algorithme a été implémenté dans une version simple, ce qui a permis d'observer qu'il terminait très rarement.
-En effet, dans le cas d'une suite régulière, un algorithme à signature déterminerait donc d'une manière ou d'une autre les monômes dominants des syzygies principales. Dans le cas commutatif, cette base est finie, et même très simple à caractériser : dans le cas incrémental, il s'agit des monômes qui sont divisibles par un des monômes dominants de la base de Gröbner $G_0$.
-En revanche, dans le cas non-commutatif, les syzygies ne sont pas forcément de type fini, ce qui nous empêche de faire cet algorithme naïf. Pour que notre algorithme ait une chance de terminer, il faut réussir à au moins traiter les syzygies principales de manière différente.
+il commence avec les paires $\{((1, i, 1), g_i) \;|\; 1 \leq i \leq m\}$, puis à chaque étape choisit la paire critique de plus petite signature, la réduit régulièrement par les paires déjà ajoutées, puis l'ajoute aux paires existantes, en ignorant éventuellement des paires dont la signature est un monôme dominant de syzygie principale. Ce dernier algorithme a été implémenté dans une version simple, ce qui a permis d'observer qu'il terminait très rarement.
+En effet, un algorithme à signature déterminerait donc d'une manière ou d'une autre les monômes dominants des syzygies. Dans le cas commutatif, cette base est finie ; c'est une conséquence du lemme de Dickson.
+En revanche, dans le cas non-commutatif, les syzygies ne sont pas forcément de type fini, ce qui nous empêche de faire cet algorithme naïf. Pour que notre algorithme ait une chance de terminer, il faut réussir à traiter les syzygies de manière différente, ou au moins les syzygies princiales si on veut qu'il termine dans le cas d'une suite régulière.
 
 \section*{Exemples de calcul de syzygies}
 
