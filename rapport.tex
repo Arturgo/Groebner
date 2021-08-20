@@ -53,7 +53,7 @@ En 1999 et 2002, Jean-Charles Faugère introduit deux algorithmes, F4 \cite{f4} 
 
 Dans le mémoire, nous avons présenté l'algorithme GVW \cite{gvw}, dans le cas particulier d'un anneau de polynômes sur un corps, avec un seul ordre monomial et l'ordre POT (Position Over Term).
 
-L'objectif du stage, et du rapport qui suit, est d'étudier comment les algorithmes à signature peuvent se généraliser au contexte non-commutatif. Nous avons adapté de nombreuses définitions en non-commutatif, et nous avons remarqué à fortiori que nos définitions coïncidaient avec celles d'un autre article \cite{noncom}. Une fois ces définitions posées, nous nous sommes heurtés à des difficultés que nous avons essayé d'identifier au mieux. Nous avons ainsi démontré un résultat qui montre une obstruction à la création d'un algorithme à signature non-commutatif : l'ensemble des monômes dominants des syzygies, ensemble essentiel à la création d'un algorithme à signature, n'est pas nécessairement un langage décidable. En ajoutant pour contrainte que l'ordre soit isomorphe à $\N$ pour les ordres ("fair" dans \cite{noncom}), nous avons réussi à démontré que l'ensemble des monômes dominants des syzygies n'est pas algébrique.
+L'objectif du stage, qui s'est déroulé en présentiel dans le laboratoire mathis de l'université de Limoges, était d'étudier comment les algorithmes à signature peuvent se généraliser au contexte non-commutatif. Avec l'aide de mes maîtres de stage, Tristan Vaccon et Cyrille Chenavier, que je tiens à remercier pour leur supervision, nous avons adapté de nombreuses définitions en non-commutatif, et nous avons remarqué à fortiori que nos définitions coïncidaient avec celles d'un autre article \cite{noncom}. Une fois ces définitions posées, nous nous sommes heurtés à des difficultés que nous avons essayé d'identifier au mieux. Nous avons ainsi démontré un résultat qui montre une obstruction à la création d'un algorithme à signature non-commutatif : l'ensemble des monômes dominants des syzygies, ensemble essentiel à la création d'un algorithme à signature, n'est pas nécessairement un langage décidable. En ajoutant pour contrainte que l'ordre soit isomorphe à $\N$ pour les ordres ("fair" dans \cite{noncom}), nous avons réussi à démontré que l'ensemble des monômes dominants des syzygies n'est pas algébrique.
 
 \section*{Algorithme de Buchberger non-commutatif}
 Commençons par adapter les différentes définitions du mémoire au cadre non-commutatif.
@@ -417,7 +417,7 @@ On a donc construit une suite de polynômes qui admet une base de Gröbner finie
 
 De plus, on peut rendre l'ordre isomorphe à $\N$ en choisissant deglex et en remplaçant le symbole $\infty$ par $\infty^{10}$ et $s$ par $s^5$, car les degrés varient d'au plus une constante lors des réécritures contenues dans une syzygie.
 
-\subsubsection*{Langage algébrique ?}
+\section*{Langage algébrique ?}
 
 La question naturelle suivante est de se demander s'il existe un automate à pile qui reconnaît les monômes dominants des syzygies.
 Il se trouve que la technique de la section précédente se généralise~: on utilise le même genre de construction, en utilisant que le langage $\{a^nb^nc^n \;|\; n \in \N\}$ n'est pas algébrique.
@@ -430,6 +430,10 @@ On considère l'espace vectoriel $V$ engendré par les triplets plus petits que 
 Décider si $(l, i, r)$ est un monôme dominant de syzygie revient à décider s'il existe des éléments $\sigma$ de $V$ tel que le coefficient de $(l, i, r)$ dans $\sigma$ est $1$, et tel que $E(\sigma) = 0$, ce qui revient à décider si un système linéaire avec un nombre fini d'équations admet des solutions, ce qui est bien entendu décidable.
 
 En revanche, si l'ordre monomial n'est pas isomorphe à $\N$, alors il n'existe pas forcément d'algorithme pour décider si un triplet $(l, i, r)$ est un monôme dominant de syzygie. Nous avons en effet trouvé une construction qui ramène ce problème au problème de l'arrêt.
+
+\section*{Conclusion}
+
+La motivation de départ, qui était d'adapter l'algorithme GVW au cadre non-commutatif, s'est révélé être un problème plus hardu que prévu ; après avoir posé des définitions qui découlaient naturellement du cadre commutatif, nous nous sommes rendus compte que le point central de l'algorithme, c'est à dire le calcul de la base de Gröbner forte, ne terminait pas. Nous avons alors essayé de démontrer des obstructions à la terminaison d'un algorithme naïf à signature, objectif que nous avons partiellement réussi.
 
 \nocite{*}
 \printbibliography
