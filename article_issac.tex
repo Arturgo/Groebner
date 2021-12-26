@@ -1,0 +1,227 @@
+\documentclass[sigconf]{acmart}
+
+\copyrightyear{2021}
+\acmYear{2021}
+\setcopyright{rightsretained}
+\acmConference[ISSAC '22]{International Symposium on Symbolic and Algebraic Computation}{July 4--7, 2022}{Lille, France}
+\acmBooktitle{International Symposium on Symbolic and Algebraic Computation (ISSAC '22), July 4--7, 2022, Lille, France}
+\acmPrice{15.00}
+\acmDOI{XX.XXX/XXXXXX.XXXXXX}
+\acmISBN{XXXXXXXXXXXXXXXXXXX}
+
+
+\setlength{\paperheight}{11in}
+\setlength{\paperwidth}{8.5in}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+
+%\usepackage{lmodern}
+%\usepackage[a4paper]{geometry}
+
+\usepackage{amsmath,  mathrsfs}
+\usepackage[all]{xy}
+\usepackage{stmaryrd}
+
+\usepackage{tikz}
+\usepackage{hyperref}
+
+
+\usepackage{algorithm}
+\usepackage[noend]{algorithmic}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+%\usepackage{graphicx}
+
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\theoremstyle{plain}
+\newtheorem{lem}{Lemma}[section]
+\newtheorem{prop}[lem]{Proposition}
+\newtheorem{thm}[lem]{Theorem}
+\newtheorem{cor}[lem]{Corollaire}
+\newtheorem{axi}{Axiome}
+
+\theoremstyle{definition}
+\newtheorem{defn}[lem]{Definition}
+
+\theoremstyle{remark}
+\newtheorem{step}{\'Etape}
+\newtheorem*{rmk}{Remark}
+\newtheorem*{expl}{Example}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\NN}{\mathbb N}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Zp}{\mathbb{Z}_p}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Qp}{\Q_p}
+\newcommand\cO{\mathcal{O}}
+\newcommand{\softO}{O\tilde{~}}
+\newcommand{\ddx}{\frac{\mathrm{d}\phantom{x}}{\mathrm{d}x}}
+\newcommand{\OKun}{O_K([0,1])}
+\newcommand{\val}{\mathrm{val}}
+
+
+\newcommand\cY{\mathcal{Y}}
+\newcommand{\ud}{\mathrm{d}}
+
+\newcommand{\LT}{LT}
+\newcommand{\LC}{LC}
+\newcommand{\LM}{LM}
+
+\newcommand\Zpt{\Zp\llbracket t \rrbracket}
+\newcommand\Qpt{\Qp\llbracket t \rrbracket}
+\newcommand\wrt{with respect to\xspace}
+
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\Y}{\mathbf{Y}}
+\renewcommand{\i}{\mathbf{i}}
+\renewcommand{\j}{\mathbf{j}}
+\renewcommand{\r}{\mathbf{r}}
+
+\newcommand{\ifnonempty}[3]{%
+  % IF #1 is empty THEN #3 ELSE #2
+  \def\tempa{}%
+  \def\tempb{#1}%
+  \ifx\tempa\tempb % Empty case
+  #3 
+  \else            % Non-empty case
+  #2
+  \fi}
+
+\newcommand{\Kz}{K^\circ}
+\newcommand{\KzX}[1][]{K\{ \X \ifnonempty{#1}{; #1}{} \}^\circ}
+\newcommand{\KX}[1][]{K \{ \X \ifnonempty{#1}{; #1}{} \}}
+\newcommand{\Lz}{L^\circ}
+\newcommand{\LzX}[1][]{L\{ \X \ifnonempty{#1}{; #1}{} \}^\circ}
+\newcommand{\LX}[1][]{L \{ \X \ifnonempty{#1}{; #1}{} \}}
+\newcommand{\TzX}[1][]{T\{ \X \ifnonempty{#1}{; #1}{} \}^\circ}
+\newcommand{\TX}[1][]{T \{ \X \ifnonempty{#1}{; #1}{} \}}
+\newcommand{\TT}{\mathbb T}
+\newcommand{\TTzX}[1][]{\TT\{ \X \ifnonempty{#1}{; #1}{} \}^\circ}
+\newcommand{\TTX}[1][]{\TT \{ \X \ifnonempty{#1}{; #1}{} \}}
+\newcommand{\LKX}[1][]{\eta^{\NN} \KX[#1]}
+
+\newcommand{\Kb}{\bar{K}}
+\newcommand{\KbX}{\Kb \{ \X \}}
+
+\newcommand\padic{$p$-adic\xspace}
+
+\def\todo#1{\ \!\!{\color{red} #1}}
+
+
+\def\eqdef{\stackrel{\text{def}}{=}}
+
+
+
+
+\begin{document}
+
+\fancyhead{}
+
+\title{On The Difficulty of Computing Non-Commutative Signature Gröbner Bases}
+
+\author{Cyrille Chenavier}
+\affiliation{Universit\'e de Limoges;
+  \institution{CNRS, XLIM UMR 7252}
+  \city{Limoges}
+  \country{France}  
+  \postcode{87060}  
+}
+\email{cyrille.chenavier@unilim.fr}
+
+
+\author{
+  Arthur Léonard}
+\affiliation{\'Ecole Normale Supérieure, 
+  \institution{DI, DMA}
+  \city{Paris}
+  \country{France}  
+}
+\email{arthur.leonard@ens.psl.eu }
+
+\author{
+  Tristan Vaccon}
+\affiliation{Universit\'e de Limoges;
+  \institution{CNRS, XLIM UMR 7252}
+  \city{Limoges}
+  \country{France}  
+  \postcode{87060}  
+}
+\email{tristan.vaccon@unilim.fr}
+
+
+\thanks{This work was supported by...}
+
+
+\begin{abstract}
+NC GB, signature...\end{abstract}
+
+
+\begin{CCSXML}
+  <ccs2012>
+  <concept>
+  <concept_id>10010147.10010148.10010149.10010150</concept_id>
+  <concept_desc>Computing methodologies~Algebraic algorithms</concept_desc>
+  <concept_significance>500</concept_significance>
+  </concept>
+  </ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Computing methodologies~Algebraic algorithms}
+
+% \vspace{-1mm}
+% \ccsdesc[500]{Computing methodologies~Algebraic algorithms}
+% \printccsdesc
+
+\vspace{-1.5mm}
+\terms{Algorithms, Theory}
+
+
+
+
+
+\keywords{Algorithms, Gröbner bases, non-commutative algebra}
+
+\maketitle
+
+%\clubpenalty=10000
+\widowpenalty = 10000
+\addtolength{\textfloatsep}{-0.45cm} % Distance between float (e.g. [t]) and text
+
+\section{Introduction}
+
+\section{Notations}
+
+\section{Rationality}
+
+\section{Algebraicity}
+
+\section{Finiteness}
+
+\section{Implementation}
+
+\bibliographystyle{plain}
+\begin{thebibliography}{99}
+  \renewcommand{\itemsep}{0em}
+  % \renewcommand{\itemsep}{0.14em}
+
+\bibitem{Bu65}
+  Buchberger Bruno,
+\newblock{{Ein Algorithmus zum Auffinden der Basiselemente des Restklassenringes nach einem nulldimensionalen Polynomideal (An Algorithm for Finding the Basis Elements in the Residue Class Ring Modulo a Zero Dimensional Polynomial Ideal)}},
+\newblock English translation in J. of Symbolic Computation, Special Issue on Logic, Mathematics, and Computer Science: Interactions. Vol. 41, Number 3-4, Pages 475--511, 2006
+
+
+
+
+  \bibitem{Sage}
+  \newblock {{S}ageMath, the {S}age {M}athematics {S}oftware {S}ystem ({V}ersion 9.2)}, The Sage Development Team, 2020, \url{http://www.sagemath.org}
+
+
+
+\end{thebibliography}
+
+\end{document}
+
