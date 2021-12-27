@@ -249,13 +249,13 @@ the free $\KX$-bimodule
 of rank $r$, with canonical
 basis $\varepsilon_1,\dots,\varepsilon_r$
 where $\varepsilon_i =(0,\dots,0,1 \otimes 1,0,\dots,0)$ ($1 \otimes 1$ in the $i$-th position) for $i \in \llbracket 1,r \rrbracket.$
-Let $\MM \left( \mathscr{F}_r \right)= \left{ a \varepsilon_i b \mid a,b \in \left\langle X \right\rangle, \: i \in \llbracket 1,r\rrbracket \right}$
+Let $\MM \left( \mathscr{F}_r \right)= \left\lbrace a \varepsilon_i b \mid a,b \in \left\langle X \right\rangle, \: i \in \llbracket 1,r\rrbracket \right\rbrace$
 be the set of module monomials in $\mathscr{F}_r.$ It is a $K$-vector space basis
 of $\mathscr{F}_r.$
 Let $\leq_\MM$ be a module
 ordering on $\MM \left( \mathscr{F}_r \right).$
 We recall that it means that
-$\leq_\MM$ is a weel-ordering
+$\leq_\MM$ is a well-ordering
 compatible with 
 scalar multiplication, that
 is 
@@ -263,7 +263,79 @@ $\mu \leq_\MM \mu'$ implies
 $a \mu b \leq_\MM a \mu' b$
 for all $\mu,\mu' \in \MM \left( \mathscr{F}_r \right)$
 and $a, b \in \left\langle X \right\rangle.$
+We assume that 
+$\leq$ and $\leq_\MM$
+are compatible
+(\textit{i.e.} for any
+$a,b \in \left\langle X \right\rangle$, $i \in \llbracket 1,r \rrbracket$,
+$a \leq b \Leftrightarrow a \varepsilon_i \leq_\MM b \varepsilon_i \Leftrightarrow \varepsilon_i a \leq_\MM \varepsilon_i b$).
+We also assume that 
+$\leq_\MM$ is fair (for any
+$\mu \in \MM (\mathscr{F}_r)$,
+the set $\left\lbrace \mu' \in \MM (\mathscr{F}_r) \mid \mu' \leq_\MM \mu \right\rbrace$ is finite).
 
+If $\alpha \in \mathscr{F}_r$, it can be uniquely
+written in the basis 
+$\MM \left( \mathscr{F}_r \right) $
+and the biggest monomial
+involved is its signature
+$\mathfrak{s}(\alpha) \in
+\mathscr{F}_r$. 
+
+If $M \subset \mathscr{F}_r$
+is a $\KX$-submodule,
+then $G \subset M$ is called
+a Gröbner basis of $M$ if
+\[\mathfrak{s}(M)= \left\lbrace a \mathfrak{s}(\gamma) b \mid a,b \in \left\langle X \right\rangle, \gamma \in G \right\rbrace. \]
+
+Let $f_1,\dots,f_r \in \KX$
+be some polynomials
+generating the ideal $I=(f_1,\dots,f_r).$
+They define a 
+$\KX$-module homomorphism:
+
+\[
+\begin{array}{ccccc}
+&& \mathscr{F}_r & \rightarrow & \KX \\
+\overline{\cdot}& : &\alpha = \sum_i c_i a_i \varepsilon_{j_i} b_i&\mapsto& \overline{\alpha}=\sum_i c_i a_i f_{j_i} b_i. \\
+\end{array}\]
+
+Elements $(f,\alpha) \in \KX \times \mathscr{F}_r$
+such that $f=\overline{\alpha}$
+are called signature polynomials.
+We denote by $f^{[\alpha]}$
+such a pair. 
+For such a pair, necessarily,
+$f \in I.$
+We denote by $I^{[\Sigma ]}=\left\lbrace f^{[\alpha]} \mid f=\overline{\alpha} \right\rbrace \subset I \times \mathscr{F}_r$
+the set of all signature
+polynomials.
+
+For $f^{[\alpha]},g^{[\beta]},
+h^{[\gamma]} \in I^{\Sigma},$
+with $\alpha, g \neq 0,$
+we say that 
+$f^{[\alpha]}$ $\mathfrak{s}$-reduces to
+$g^{[\beta]}$ by
+$h^{[\gamma]}$
+if there exist $a,b \in 
+\left\langle X \right\rangle$
+such that:
+\begin{itemize}
+\item $a \LM(h)b \in supp(f),$
+\item $\mathfrak{s}(a \gamma b) \leq \mathfrak{s}(\alpha),$ and
+\item $g^{[\beta]}=f^{[\alpha]}-\frac{coeff(f,a \LM(h)b}{\LC(g)} a h^{[\gamma]}b.$
+\end{itemize}
+Reduction by a set $G^{[\Sigma]} \in I^{[\Sigma]}$
+is then defined as the 
+reflexive, transitive closure
+of the reduction by elements
+of $G^{[\Sigma]} $.
+
+Finally, $G^{[\Sigma]} $
+is called a \textit{signature
+Gröbner basis} of $I^{[\Sigma]}$ if all
+$f^{[\alpha]} \in I^{[\Sigma]}$ $\mathfrak{s}$-reduce to zero by $G^{[\Sigma]}.$
 
 \section{Rationality}
 
