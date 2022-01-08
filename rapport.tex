@@ -49,11 +49,11 @@
 \section*{Introduction}
 Dans les années 1960, Bruno Buchberger introduit les bases de Gröbner, et trouve un algorithme qui permet de les calculer \cite{buchberger}. Cependant, cet algorithme, basé sur des divisions polynomiales multivariées répétées, effectue de nombreuses divisions dont le reste est nul, qui ne permettent pas de découvrir des nouveaux polynômes dans la base. Pour améliorer significativement la performance des algorithmes de calcul des bases de Gröbner, de nombreux critères ont été trouvés pour éviter d'effectuer ces divisions.
 
-En 1999 et 2002, Jean-Charles Faugère introduit deux algorithmes, F4 \cite{f4} et F5 \cite{f5}. Le premier utilise de l'algèbre linéaire pour effectuer plusieurs réductions en parallèle. En revanche, le second utilise l'information donnée par les divisions à zéro, en étudiant le module des syzygies. C'est le premier algorithme à signature. L'algorithme F5 a ensuite été simplifié par Gao, Guan et Volny dans l'algorithme G2V \cite{g2v}, qui a lui-même été amélioré et généralisé par Gao, Volny et Wang en 2010 dans l'algorithme GVW.
+En 1999 et 2002, Jean-Charles Faugère introduit deux algorithmes, F4~\cite{f4} et~F5~\cite{f5}. Le premier utilise de l'algèbre linéaire pour effectuer plusieurs réductions en parallèle. En revanche, le second utilise l'information donnée par les divisions à zéro, en étudiant le module des syzygies. C'est le premier algorithme à signature. L'algorithme F5 a ensuite été simplifié par Gao, Guan et Volny dans l'algorithme G2V \cite{g2v}, qui a lui-même été amélioré et généralisé par Gao, Volny et Wang en 2010 dans l'algorithme GVW.
 
 Dans le mémoire, nous avons présenté l'algorithme GVW \cite{gvw}, dans le cas particulier d'un anneau de polynômes sur un corps, avec un seul ordre monomial et l'ordre POT (Position Over Term).
 
-L'objectif du stage, qui s'est déroulé en présentiel dans le laboratoire mathis de l'université de Limoges, était d'étudier comment les algorithmes à signature peuvent se généraliser au contexte non-commutatif. Avec l'aide de mes maîtres de stage, Tristan Vaccon et Cyrille Chenavier, que je tiens à remercier pour leur supervision, nous avons adapté de nombreuses définitions en non-commutatif, et nous avons remarqué à fortiori que nos définitions coïncidaient avec celles d'un autre article \cite{noncom}. Une fois ces définitions posées, nous nous sommes heurtés à des difficultés que nous avons essayé d'identifier au mieux. Nous avons ainsi démontré un résultat qui montre une obstruction à la création d'un algorithme à signature non-commutatif : l'ensemble des monômes dominants des syzygies, ensemble essentiel à la création d'un algorithme à signature, n'est pas nécessairement un langage décidable. En ajoutant pour contrainte que l'ordre soit isomorphe à $\N$ pour les ordres ("fair" dans \cite{noncom}), nous avons réussi à démontré que l'ensemble des monômes dominants des syzygies n'est pas algébrique.
+L'objectif du stage, qui s'est déroulé en présentiel dans le laboratoire XLIM de l'université de Limoges, était d'étudier comment les algorithmes à signature peuvent s'adapter au contexte non-commutatif. Avec l'aide de mes maîtres de stage, Tristan Vaccon et Cyrille Chenavier, que je tiens à remercier pour leur supervision, nous avons adapté de nombreuses définitions en non-commutatif, et nous avons remarqué \textit{a posteriori} que nos définitions coïncidaient avec celles d'un autre article \cite{noncom}, apparu en preprint après la fin du stage. Une fois ces définitions posées, nous nous sommes heurtés à des difficultés que nous avons essayé d'identifier au mieux. Nous avons ainsi démontré un résultat qui montre une obstruction à la création d'un algorithme à signature non-commutatif : l'ensemble des monômes dominants des syzygies, ensemble essentiel à la création d'un algorithme à signature, n'est pas nécessairement un langage décidable. En ajoutant pour contrainte que l'ordre soit isomorphe à $\N$ pour les ordres ("fair" dans \cite{noncom}), nous avons réussi à démontré que l'ensemble des monômes dominants des syzygies n'est pas algébrique.
 
 \section*{Algorithme de Buchberger non-commutatif}
 Commençons par adapter les différentes définitions du mémoire au cadre non-commutatif.
@@ -76,7 +76,7 @@ $$\forall A, B \in \M, (A \;|\; B \iff \exists L, R \in \M, LAR = B)$$
 
 \begin{dfn}[Base de Gröbner]
 	Soit $I$ un idéal de $\A$, et soit $G$ un ensemble de polynômes de $I$.
-	Si pour tout $f \in I$, il existe $g \in G$ tel que $\LM(g) \;|\; \LM(f)$, on dit que $G$ est une base de Gröbner de $I$.
+	On dit que $G$ est une base de Gröbner de $I$ si pour tout $f \in I$, il existe $g \in G$ tel que $\LM(g) \;|\; \LM(f)$, 
 \end{dfn}
 
 \begin{fact}
@@ -89,13 +89,13 @@ $$\forall A, B \in \M, (A \;|\; B \iff \exists L, R \in \M, LAR = B)$$
 
 Soit $I$ un idéal de type fini, engendré par $g_1, \dots, g_m$, nous disposons de l'algorithme de Buchberger non-commutatif qui nous permet de calculer une base de Gröbner finie de $I$ si elle existe. 
 
-L'algorithme de Buchberger non-commutatif est en fait très similaire à l'algorithme commutatif, à l'exception que les S-polynômes de deux polynômes $P$ et $Q$ sont de la forme $lPr - l'Qr'$, où $l, r, l', r \in \M$ sont tels que $l\LM(P)r = l'\LM(Q)r'$, $\deg{l\LM(P)} > \deg{l'}$ et $\deg{\LM(Q)r'} > \deg{r}$.
+L'algorithme de Buchberger non-commutatif est en fait très similaire à l'algorithme commutatif, à l'exception que les S-polynômes de deux polynômes $P$ et $Q$ sont de la forme $lPr - l'Qr'$, où $l, r, l', r \in \M$ sont tels que $l\LM(P)r = l'\LM(Q)r'$, $\deg(l\LM(P)) > \deg(l')$ et $\deg(\LM(Q)r') > \deg(r)$.
 
 Cependant, comme dans le cas commutatif, cet algorithme effectue des réductions à zéro que nous voudrions éviter.
 
 \subsection*{Exemple d'exécution}
 
-Considérons $g_1 = ts - a, g_2 = sa - at$ avec l'ordre deglex.
+Considérons $g_1 = ts - a, g_2 = sa - at$ avec l'ordre deglex (c'est une présentation finie du module des tresses à trois brins \cite{tresses}).
 On obtient dans l'ordre les S-polynômes suivants~:
 \begin{itemize}
 \item $g_1 a - t g_2 = tat - aa$, qui est irréductible, on ajoute donc $g_3 := tat - aa$ à la base de Gröbner.
@@ -115,7 +115,7 @@ Comme il était fastidieux d'exécuter l'algorithme de Buchberger à la main sur
 
 Nous aimerions donc adapter le concept de signature au cadre non-commutatif, afin d'obtenir un algorithme qui permette de calculer une base de Gröbner finie de $I$ si elle existe, avec peu de réductions à zéro, grâce à un théorème F5 non-commutatif.
 
-Comme nous allons le voir, les concepts s'adaptent naturellement, mais qu'il est difficile de garantir la terminaison d'un algorithme à signature.
+Comme nous allons le voir, les concepts s'adaptent naturellement, mais il est difficile de garantir la terminaison d'un algorithme à signature.
 
 \begin{dfn}[Chemins de réduction]
 	On appelle $\CR$ l'ensemble des chemins de réduction.
@@ -136,7 +136,7 @@ on notera~:
 \item $\LT(\sigma) := \LC(\sigma)\LM(\sigma)$ le terme dominant de $\sigma$.
 \end{itemize}
 
-\begin{dfn}[Sigpolynômes]
+\begin{dfn}[Sigpolynômes, Syzygies]
 	On note :
 	$$M := \{(\sigma, f) \in \CR\times\A \;|\; E(\sigma) = f\}$$
 	Les élements de $M$ sont appelés sigpolynômes.
@@ -207,10 +207,10 @@ Les générateurs des syzygies principales sont de la forme :
 & (b^3X, 2, 1) - (1, 2, Xb^3) \\
 & (baX, 1, 1) - (abX, 1, 1) - (1, 1, Xba) + (1, 1, Xab) \\
 \end{align*}
-Pour n'importe quel $X \in \M$.
+pour n'importe quel $X \in \M$.
 
 Remarquons que l'on peut construire d'autres syzygies principales à partir des ces générateurs :
-Par exemple, si on multiplie le deuxième gérateur par $b^2$ à gauche et qu'on fait le remplacement $X \rightarrow aX$ dans la troisième relation, on obtient~:
+par exemple, si on multiplie le deuxième générateur par $b^2$ à gauche et qu'on fait le remplacement $X \rightarrow aX$ dans la troisième relation, on obtient~:
 $$(b^2abX, 2, 1) - (1, 2, aXb^3) + (b^2, 1, Xb^3) $$
 En simplifiant par la deuxième relation, on obtient :
 $$(bab^2X, 2, 1) - (1, 2, aXb^3) + (b^2, 1, Xb^3) + (b, 1, bXb^3)$$
@@ -221,7 +221,7 @@ $$(a, 2, Xb^3) - (1, 2, aXb^3) + (b^2, 1, Xb^3) + (b, 1, bXb^3) + (1, 1, b^2Xb^3
 Qui donne un nouveau type de monôme dominant. Cette approche peut-être systématisée en un algorithme à la Knuth-Bendix.
 
 Un algorithme à signature "naïf" ferait exactement la même chose que GVW dans le nouveau langage :
-il commence avec les paires $\{((1, i, 1), g_i) \;|\; 1 \leq i \leq m\}$, puis à chaque étape choisit la paire critique de plus petite signature, la réduit régulièrement par les paires déjà ajoutées, puis l'ajoute aux paires existantes, en ignorant éventuellement des paires dont la signature est un monôme dominant de syzygie principale. Ce dernier algorithme a été implémenté dans une version simple, ce qui a permis d'observer qu'il terminait très rarement.
+il commence avec les paires $\{((1, i, 1), g_i) \;|\; 1 \leq i \leq m\}$, puis à chaque étape choisit la paire critique de plus petite signature, la réduit régulièrement par les paires déjà ajoutées, puis l'ajoute aux paires existantes, en ignorant éventuellement des paires dont la signature est un monôme dominant de syzygie principale. Ce dernier algorithme a été implémenté par moi-même dans une version simple, ce qui a permis d'observer qu'il terminait très rarement.
 En effet, un algorithme à signature déterminerait donc d'une manière ou d'une autre les monômes dominants des syzygies. Dans le cas commutatif, cette base est finie ; c'est une conséquence du lemme de Dickson.
 En revanche, dans le cas non-commutatif, les syzygies ne sont pas forcément de type fini, ce qui nous empêche de faire cet algorithme naïf. Pour que notre algorithme ait une chance de terminer, il faut réussir à traiter les syzygies de manière différente, ou au moins les syzygies princiales si on veut qu'il termine dans le cas d'une suite régulière.
 
@@ -319,7 +319,9 @@ Ce fait implique qu'il n'y a pas de base de Gröbner forte finie de $(g_1, g_2)$
 \section*{Langage régulier ?}
 Au vu de la forme des syzygies principales, et de l'algorithme pour en calculer de nouvelles, on peut se demander si un automate peut reconnaître les monômes dominants des syzygies, lorsque la base de Gröbner est finie.
 Nous allons démontrer que ce n'est pas le cas, en utilisant le fait que le langage $\{a^nb^n \;|\; n \in \N\}$ n'est pas régulier.
-Considérons les polynômes~:
+Considérons, pour l'alphabet 
+$$\{a, b, c, d, e, s, t, x, y, z, \infty\}$$
+les polynômes~:
 \begin{align*}
 g_1 & := sa - tcx \\
 g_2 & := xa - ax \\
@@ -354,7 +356,7 @@ Le dernier $b$ va absorber un $x$, générer un $z$ et se transformer en $d$, le
 Les $x$ et les $y$ sont des "messages" qui commutent avec les $a$ et les $d$. Un $x$ "dit" à la frontière entre les $b$ et les $d$ qu'un $a$ s'est transformé en $c$, alors qu'un $y$ "dit" à la frontière entre les $a$ et les $c$ qu'un $b$ s'est transformé en $d$, l'objectif étant que pour comparer le nombre de $a$ et de $b$, il y ait autant de transformations de chaque type.
 Le $z$ est le message qui permet de retransformer les $d$ en $b$ et les $c$ en $a$ à la fin du processus. On reparlera du rôle de $\infty$ plus tard.
 
-Pour mieux comprendre, prenons $n = 2$. On a que $(1, 11, a^2b^2e)$ est un monôme dominant de syzygie car on a les réécritures suivantes~:
+Pour mieux comprendre, prenons $n = 2$. Le monôme $(1, 11, a^2b^2e)$ est un monôme dominant de syzygie car on a les réécritures suivantes~:
 \begin{align*}
 saabbe & =_{1} tcxabbe =_{2} tcaxbbe =_{6} tcadybe \\
 & =_{5} tcaydbe =_{4} tcyadbe =_{7} tccxdbe \\
@@ -426,8 +428,8 @@ On en déduit que les monômes dominants de syzygies ne sont pas toujours reconn
 \section*{Langage décidable}
 
 Si l'ordre monomial est isomorphe pour les ordres à $\N$, il existe bien un algorithme pour décider si un triplet $(l, i, r)$ est un monôme dominant de syzygie, mais il s'avère qu'il est très peu efficace~:
-On considère l'espace vectoriel $V$ engendré par les triplets plus petits que $(l, i, r)$, qui est de dimension finie.
-Décider si $(l, i, r)$ est un monôme dominant de syzygie revient à décider s'il existe des éléments $\sigma$ de $V$ tel que le coefficient de $(l, i, r)$ dans $\sigma$ est $1$, et tel que $E(\sigma) = 0$, ce qui revient à décider si un système linéaire avec un nombre fini d'équations admet des solutions, ce qui est bien entendu décidable.
+on considère l'espace vectoriel $V$ engendré par les triplets plus petits que $(l, i, r)$, qui est de dimension finie.
+Décider si $(l, i, r)$ est un monôme dominant de syzygie revient à décider s'il existe des éléments $\sigma$ de $V$ tel que le coefficient de $(l, i, r)$ dans $\sigma$ est $1$, et tel que $E(\sigma) = 0$, ce qui revient à décider si un système linéaire avec un nombre fini d'équations admet des solutions, ce qui est bien enten		du décidable.
 
 En revanche, si l'ordre monomial n'est pas isomorphe à $\N$, alors il n'existe pas forcément d'algorithme pour décider si un triplet $(l, i, r)$ est un monôme dominant de syzygie. Nous avons en effet trouvé une construction qui ramène ce problème au problème de l'arrêt.
 
@@ -437,5 +439,85 @@ La motivation de départ, qui était d'adapter l'algorithme GVW au cadre non-com
 
 \nocite{*}
 \printbibliography
+
+\section*{Annexe}
+
+Considérons un exemple supplémentaire sur les lettres $t, x, a, b$.
+Sur les monômes, nous utiliserons l'ordre deglex pour $a < b < t < x$ (qui est isomorphe à $\N$).
+
+Prenons~:
+\begin{align*}
+	g_1 &:= xt - ta \\
+	g_2 &:= xt - tb \\
+	g_3 &:= b - a
+\end{align*}
+Il n'y a aucune paire critique, il s'agit donc bien d'une base de Gröbner.
+
+Maintenant, sur $\M\times\{1,2,3\}\times\M$, nous définissons un ordre (qui est isomorphe à $\N$), où nous avons $(l, i, r) \leq (l', j, r')$ si l'une des conditions ci-desous est vérifiée~:
+\begin{itemize}
+	\item $\deg{l\LM(g_i)r} < \deg{l'\LM(g_j)r'}$
+	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ et $i < j$
+	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ et $i = j$ et $\deg{r} < \deg{r'}$.
+	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ et $i = j$ et $\deg{r} = \deg{r'}$ et $l \leq l'$.
+\end{itemize}
+On définit le degré d'un chemin de réduction comme le degré maximal d'un de ses termes, où le degré d'un terme est défini par~:
+$$\deg{(l, i, r)} = \deg{l \LM(g_i) r}$$
+
+\begin{lem}
+	Dans cet exemple, $M$ n'admet pas de base de Gröbner forte.
+\end{lem}
+\begin{proof}
+	Supposons par l'absurde que $M$ admette une base de Gröbner forte $G_f$. On peut réduire chaque élément de monôme dominant non-nul de $G_f$ par les syzygies de $G_f$, et ainsi, on peut supposer sans perte de généralité qu'ils sont tous irréductibles (et pas seulement en tête !) par les syzygies.
+	
+	\begin{fact}
+		Dans cet exemple, pour tout sigpolynôme $(\sigma, f)$ de $G_f$, $\deg{\LM(f)} = \deg{\LM(\sigma)}$.
+	\end{fact}
+	\begin{proof}
+	Nous sommes dans un cas homogène : dans le cas contraire, les termes de degré $\deg{\LM(\sigma)}$ dans $\sigma$ formeraient une syzygie, ce qui contredit l'hypothèse que $(\sigma, f)$ est irréductible par les syzygies.
+	\end{proof}
+	
+	Pour tout $n \in \N$,
+	$$\left(- (x^n, 2, 1)
+		- \sum_{i = 0}^{n - 1}(x^i, 1, a^{n - 1 - i}b) + 
+		\sum_{i = 0}^{n} (x^i, 1, a^{n - i})
+		, ta^nb - ta^{n+1} \right)$$
+	est dans $M$ donc doit être réductible par un élément $(\sigma_n, f_n)$ de $G_f$, il existe donc $l, r \in \M$ tels que~:
+	\begin{align*}
+		l\LM(f_n)r = ta^nb \\
+		l \LM(\sigma_n) r \leq (x^n, 2, 1)
+	\end{align*}
+	
+	On choisit maintenant $n$ tel que le degré de $ta^nb$ est strictement plus grand que le plus grand degré d'un monôme dominant d'un élément de $G_f$. 
+	Dans ce cas, $\LM(f_n)$ est d'une des formes : $a^k$, $a^kb$ $ta^k$.
+	
+	\begin{itemize}
+		\item Cas où $\LM(f_n)$ ne contient pas de $t$. 
+		
+		% Ce terme peut seulement apparaître en utilisant un 3 avec quelqu'un du même degré (ce n'est pas forcément le monôme dominant).
+		
+		\item Cas $\LM(f_n) = ta^k$.
+		
+		% On peut seulement le réécrire en des trucs lexicographiquement plus grands !
+	\end{itemize}
+	
+	Les deux cas mènent à une contradiction.
+\end{proof}
+
+Définissons une syzygie particulière~:
+$$\sigma := (t, 3, 1) + (1, 2, 1) - (1, 1, 1)$$
+
+\begin{lem}
+	L'union de $\{\sigma\}$ et des syzygies principales est une base de Gröbner des syzygies.
+\end{lem}
+\begin{proof}
+	Considérons une syzygie homogène $s$, nous voulons montrer qu'elle est réductible par $\sigma$ ou par l'une des syzygies principales. 
+	
+	Supposons que $s$ n'est réductible par aucune syzygie principale.
+	% Qu'est-ce que cela veut dire ?
+	
+	% TODO : argumenter que s est réductible
+	
+	Finalement n'importe quelle syzygie $s$ est réductible, car la syzygie constituée des termes du plus haut degré est réductible (car homogène), et la même réduction fonctionne sur $s$.
+\end{proof}
 
 \end{document}
