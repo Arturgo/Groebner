@@ -456,9 +456,11 @@ Il n'y a aucune paire critique, il s'agit donc bien d'une base de Gröbner.
 Maintenant, sur $\M\times\{1,2,3\}\times\M$, nous définissons un ordre (qui est isomorphe à $\N$), où nous avons $(l, i, r) \leq (l', j, r')$ si l'une des conditions ci-desous est vérifiée~:
 \begin{itemize}
 	\item $\deg{l\LM(g_i)r} < \deg{l'\LM(g_j)r'}$
-	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ et $i < j$
-	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ et $i = j$ et $\deg{r} < \deg{r'}$.
-	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ et $i = j$ et $\deg{r} = \deg{r'}$ et $l \leq l'$.
+	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ et $i \leq 2$ et $j = 3$.
+	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ et ($i, j \leq 2$ ou $i = j = 3$) et $\deg{r} < \deg{r'}$.
+	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ et ($i, j \leq 2$ ou $i = j = 3$) et $\deg{r} = \deg{r'}$ et $l\LM(g_i)r \geq l'\LM(g_j)r'$.
+	% Penser à xxt xta taa tab xtb pour voir que le signe doit être dans l'autre sens.
+	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ et ($i, j \leq 2$ ou $i = j = 3$) et $\deg{r} = \deg{r'}$ et $l\LM(g_i)r = l'\LM(g_j)r'$ et $i \leq j$.
 \end{itemize}
 On définit le degré d'un chemin de réduction comme le degré maximal d'un de ses termes, où le degré d'un terme est défini par~:
 $$\deg{(l, i, r)} = \deg{l \LM(g_i) r}$$
@@ -481,7 +483,7 @@ $$\deg{(l, i, r)} = \deg{l \LM(g_i) r}$$
 		- \sum_{i = 0}^{n - 1}(x^i, 1, a^{n - 1 - i}b) + 
 		\sum_{i = 0}^{n} (x^i, 1, a^{n - i})
 		, ta^nb - ta^{n+1} \right)$$
-	est dans $M$ donc doit être réductible par un élément $(\sigma_n, f_n)$ de $G_f$, il existe donc $l, r \in \M$ tels que~:
+	est dans $M$ donc doit être réductible en tête par un élément $(\sigma_n, f_n)$ de $G_f$, il existe donc $l, r \in \M$ tels que~:
 	\begin{align*}
 		l\LM(f_n)r = ta^nb \\
 		l \LM(\sigma_n) r \leq (x^n, 2, 1)
@@ -492,15 +494,15 @@ $$\deg{(l, i, r)} = \deg{l \LM(g_i) r}$$
 	
 	\begin{itemize}
 		\item Cas où $\LM(f_n)$ ne contient pas de $t$. 
-		
-		% Ce terme peut seulement apparaître en utilisant un 3 avec quelqu'un du même degré (ce n'est pas forcément le monôme dominant).
+		Dans ce cas, le terme $\LM(f_n)$ peut seulement apparaître grâce à un terme de la forme $(u, 3, v)$ dans $\sigma_n$, avec $\deg (u, 3, v) = \deg \LM(f_n)$, ce qui une contradiction car~:
+		$$(lu, 3, vr) \leq l \LM(\sigma_n) r \leq (x^n, 2, 1)$$
+		Avec $\deg (lu, 3, vr) = \deg (x^n, 2, 1)$.
 		
 		\item Cas $\LM(f_n) = ta^k$.
-		
-		% On peut seulement le réécrire en des trucs lexicographiquement plus grands !
+		Ce cas est impossible~: le terme $ta^k$ ne peut être réécrit qu'en des termes de même degré lexicographiquement plus grands par les règles données.
 	\end{itemize}
 	
-	Les deux cas mènent à une contradiction.
+	Les deux cas mènent donc à une contradiction.
 \end{proof}
 
 Définissons une syzygie particulière~:
@@ -513,9 +515,16 @@ $$\sigma := (t, 3, 1) + (1, 2, 1) - (1, 1, 1)$$
 	Considérons une syzygie homogène $s$, nous voulons montrer qu'elle est réductible par $\sigma$ ou par l'une des syzygies principales. 
 	
 	Supposons que $s$ n'est réductible par aucune syzygie principale.
-	% Qu'est-ce que cela veut dire ?
 	
-	% TODO : argumenter que s est réductible
+	Soit $(l, i, r)$ le monôme dominant de $s$.
+	
+	% Il faut retransformer la preuve pour parler des cycles de réécriture à la place des syzygies homogènes :
+	% Toute syzygie s'écrit comme combinaison linéaire de cycles de réécriture : on prend  le monome dominant de la syzygie, et on réduit la syzygie par un sous-cycle de la syzygie de telle manière à enlever l'arc du monôme dominant. On répète jusqu'à obtenir 0.
+	
+	% Si le monôme dominant est un 3, alors soit il y a un t à gauche de la réécriture auquel cas on peut le réécrire par sigma, soit le a réécrit est dans le "garbage" (il ne peut pas être réécrit par aucun t), le b obtenu doit être retransformé en a par la même règle, et alors on remarque que les hypothèses sur l'ordre font que le contexte est le même dans les deux cas : les deux termes sont identiques, contradiction.
+	
+	% Sinon, s'il n'y a aucun 3, alors, comme  toutes les syzygies sont principales car elles agissent toutes sur des t différents (et donc commutent).
+	% En particulier, on peut considérer le premier t : les première réécritures se font dessus. Comme on n'utilise pas la règle 3, il est impossible de créér une syzygie non-nulle.
 	
 	Finalement n'importe quelle syzygie $s$ est réductible, car la syzygie constituée des termes du plus haut degré est réductible (car homogène), et la même réduction fonctionne sur $s$.
 \end{proof}
