@@ -512,21 +512,40 @@ $$\sigma := (t, 3, 1) + (1, 2, 1) - (1, 1, 1)$$
 	L'union de $\{\sigma\}$ et des syzygies principales est une base de Gröbner des syzygies.
 \end{lem}
 \begin{proof}
-	Considérons une syzygie homogène $s$, nous voulons montrer qu'elle est réductible par $\sigma$ ou par l'une des syzygies principales. 
+	Nous voulons montrer que toute syzygie non-nulle est réductible en tête par $\sigma$ ou par l'une des syzygies principales.
+	Pour cela, comme l'ordre est isomorphe à $\N$, il suffit de montrer que toute syzygie non-nulle est réductible (pas forcément en tête), car en répétant les réductions, on finira par réduire le monôme dominant, ce qui nous donnera une réduction en tête.
 	
-	Supposons que $s$ n'est réductible par aucune syzygie principale.
+	Considérons une syzygie non-nulle $s$, dont on veut montrer qu'elle est réductible par $\sigma$ ou par l'une des syzygies principales.
 	
-	Soit $(l, i, r)$ le monôme dominant de $s$.
+	Chaque règle étant de la forme $\alpha_i - \beta_i$, on peut poser 
+	$$m := \min_{(l, i, r) \mbox{ monôme de } s} l \beta_i r$$
 	
-	% Il faut retransformer la preuve pour parler des cycles de réécriture à la place des syzygies homogènes :
-	% Toute syzygie s'écrit comme combinaison linéaire de cycles de réécriture : on prend  le monome dominant de la syzygie, et on réduit la syzygie par un sous-cycle de la syzygie de telle manière à enlever l'arc du monôme dominant. On répète jusqu'à obtenir 0.
+	Comme $E(s) = 0$, il existe au moins deux monômes distincts de $s$, $(l_1, i_1, r_1)$ et $(l_2, i_2, r_2)$, tels que $l_1 \beta_{i_1} r_1 = l_2 \beta_{i_2} r_2 = m$.
+	On ne peut pas avoir $l_1 = l_2$ et $r_1 = r_2$, car dans ce cas, on doit avoir $\beta_{i_1} = \beta_{i_2}$, d'où $i_1 = i_2$ ce qui est impossible.
 	
-	% Si le monôme dominant est un 3, alors soit il y a un t à gauche de la réécriture auquel cas on peut le réécrire par sigma, soit le a réécrit est dans le "garbage" (il ne peut pas être réécrit par aucun t), le b obtenu doit être retransformé en a par la même règle, et alors on remarque que les hypothèses sur l'ordre font que le contexte est le même dans les deux cas : les deux termes sont identiques, contradiction.
+	Si $\deg{l_1} \geq \deg{l_2 \beta_{i_2}}$ ou $\deg{l_2} \geq \deg{l_1 \beta_{i_1}}$, on peut supposer par symétrie que $m$ s'écrive~:
+	$$m_1 \beta_{i_1} m_2 \beta_{i_2} m_3$$
+	On a alors~:
+	\begin{align*}
+		(l_1, i_1, r_1) &= (m_1, i_1, m_2 \beta_{i_2} m_3) \\
+		(l_2, i_2, r_2) &= (m_1 \beta_{i_1} m_2, i_2, m_3)
+	\end{align*}
+	On voit alors que $s$ est réductible par la syzygie principale~:
+	$$m_1 (g_{i_1} (m_2, i_2, 1) - (1, i_1, m_2) g_{i_2}) m_3$$
 	
-	% Sinon, s'il n'y a aucun 3, alors, comme  toutes les syzygies sont principales car elles agissent toutes sur des t différents (et donc commutent).
-	% En particulier, on peut considérer le premier t : les première réécritures se font dessus. Comme on n'utilise pas la règle 3, il est impossible de créér une syzygie non-nulle.
-	
-	Finalement n'importe quelle syzygie $s$ est réductible, car la syzygie constituée des termes du plus haut degré est réductible (car homogène), et la même réduction fonctionne sur $s$.
+	Sinon, les deux occurences, de $\beta_{i_1}$ et $\beta_{i_2}$, choisies dans $m$ ont une intersection non-vide mais ne coincident pas.
+	Cela n'est possible que si $\{i_1, i_2\} = \{1, 3\}$.
+	Supposons par symétrie $i_1 = 1$ et $i_2 = 3$, dans ce cas, $m$ s'écrit~:
+	$$m_1 ta m_2$$
+	On a alors~:
+	\begin{align*}
+		(l_1, i_1, r_1) &= (m_1, 1, m_2 \beta_{i_2} m_2) \\
+		(l_2, i_2, r_2) &= (m_1 t, 3, m_2)
+	\end{align*}
+	On voit alors que $s$ est réductible par la syzygie~:
+	$$m_1 \sigma m_2$$
+	N'importe quelle syzygie non-nulle est donc réductible.
 \end{proof}
+Cela répond par la négative à une conjecture ouverte.
 
 \end{document}
