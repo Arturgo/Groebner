@@ -45,11 +45,14 @@
 
 \theoremstyle{definition}
 \newtheorem{defn}[lem]{Definition}
+\newtheorem*{fact}{Fact}
+
 
 \theoremstyle{remark}
 \newtheorem{step}{\'Etape}
 \newtheorem*{rmk}{Remark}
 \newtheorem*{expl}{Example}
+
 
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\NN}{\mathbb N}
@@ -69,9 +72,13 @@
 \newcommand\cY{\mathcal{Y}}
 \newcommand{\ud}{\mathrm{d}}
 
+\newcommand{\sss}{\mathfrak{s}}
+
 \newcommand{\LT}{LT}
 \newcommand{\LC}{LC}
 \newcommand{\LM}{LM}
+
+\newcommand{\GS}{G^{[\Sigma]}}
 
 \newcommand\Zpt{\Zp\llbracket t \rrbracket}
 \newcommand\Qpt{\Qp\llbracket t \rrbracket}
@@ -462,7 +469,236 @@ Since $X=Y\cap Z$ \fixmecc{justifier cette formule}, $Z$ is a regular language a
 
 \section{Context free}
 
-\section{Finiteness}
+\section{Fairness}
+
+\section{Compatibility}
+
+In this Section,
+we provide an example
+of a set of polynomials
+such that 
+it has a finite GB,
+its module of
+syzygies is generated
+by one syzygy plus
+the principal syzygies,
+but there is
+a non-compatible order
+such that it
+has no finite signature GB.
+
+We set $X = \{t, x, a, b \}$.
+We take as order on 
+$\left\langle X \right\rangle$ the 
+graded lexicographic order
+with $a < b < t < x$.
+
+Let us define:
+\begin{align*}
+	g_1 &:= xt - ta \\
+	g_2 &:= xt - tb \\
+	g_3 &:= b - a
+\end{align*}
+One shows easily
+thanks to Buchberger's criterion
+that $(g_1,g_2,g_3)$
+is a GB of the ideal $I$ it spans.
+
+We define the following
+fair but non-compatible order
+on $\MM \left( \mathscr{F}_3 \right):$
+  $(l, i, r) \leq (l', j, r')$ if one of the following
+  conditions is satisfied:
+\begin{itemize}
+	\item $\deg{l\LM(g_i)r} < \deg{l'\LM(g_j)r'}$
+	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ and $i < j$.
+	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ and $i = j$ and $\deg{r} < \deg{r'}$.
+	\item $\deg{l\LM(g_i)r} = \deg{l'\LM(g_j)r'}$ and $i = j$ and $\deg{r} = \deg{r'}$ and $l\LM(g_i)r \geq l'\LM(g_j)r'$.
+	% Penser à xxt xta taa tab xtb pour voir que le signe doit être dans l'autre sens.
+\end{itemize}
+
+We define the 
+degree of an element of 
+$\MM \left( \mathscr{F}_3 \right)$
+by $$\deg{(l, \varepsilon_i, r)} = \deg{l \LM(g_i) r}$$.
+This extends to $\mathscr{F}_3$
+by stating that the 
+degree of 
+an element is the maximal
+degree of the monomials
+of its terms.
+
+\begin{lem}
+	In this context
+	$I^\Sigma$ has no
+	finite signature GB.
+\end{lem}
+\begin{proof}
+We proceed by contradiction.
+Let us assume that $G^{[\Sigma]}$ is such 
+a basis.
+Using inter-reduction,
+we may assume that
+$G^{[\Sigma]}$
+is reduced.	
+	
+	\begin{fact}
+		For any $(f,\sigma)$ in $G_f$, $\deg{\LM(f)} = \deg{\LM(\sigma)}$.
+	\end{fact}
+	\begin{proof}
+	If it were not the case,
+	 thanks to
+	homogeneity,
+	the terms of 
+	degree  $\deg{\LM(\sigma)}$ in $\sigma$ would correspond to
+	a syzygy, which contradicts our hypothesis
+	that $(f,\sigma)$ is
+	irreducible.
+	\end{proof}
+	
+Now, for any $n \in \N$,
+	$$\left(ta^nb - ta^{n+1}, - (x^n, 2, 1)
+		- \sum_{i = 0}^{n - 1}(x^i, 1, a^{n - 1 - i}b) + 
+		\sum_{i = 0}^{n} (x^i, 1, a^{n - i})
+		  \right)$$
+	is in $I^{[\Sigma]}.$
+Hence, it has to be
+$\sss$-reducible
+by some 
+ $(f_n, \sigma_n)$ of $G^{[\Sigma]}$.
+ There is then some
+ $l, r \in \KX$ such that:
+	\begin{align*}
+		l\LM(f_n)r = ta^nb, \\
+		l \LM(\sigma_n) r \leq (x^n, 2, 1).
+	\end{align*}
+	
+We take some $n$
+such that 
+the degree of $ta^nb$
+is strictly bigger
+than any $\LM$
+of a polynomial
+in $\GS$. 
+	Therefore, $\LM(f_n)$ is one of the following: $a^k$, $a^kb$, or $ta^k$,
+	for some $k.$
+Two cases are then possible:	
+	\begin{itemize}
+		\item $\LM(f_n)$ 
+		has no $t$. 
+		In that case,$\LM(f_n)$  can only
+be reached using 
+a term of the form
+$(u, \varepsilon_3, v)$ 
+in $\sigma_n$, with $\deg (u, \varepsilon_3, v) = \deg \LM(f_n)$,
+and this is a contradiction
+since:
+		$$(lu, \varepsilon_3, vr) \leq l \LM(\sigma_n) r \leq (x^n, \varepsilon_2, 1),$$
+		with $\deg (lu, 3, vr) = \deg (x^n, 2, 1)$.
+		
+		\item Otherwise, $\LM(f_n) = ta^k$.
+		This is actually
+not possible:
+$ta^k$ is divisible
+by none of the $\LM(g_i)$'s.
+	\end{itemize}
+Consequently, we obtain
+a contradiction in both
+cases, wich concludes
+the proof.
+\end{proof}
+
+Let us define the
+following syzygy:
+$$\sigma := (t, 3, 1) + (1, 2, 1) - (1, 1, 1).$$
+
+Then, the syzygy module
+can be generated using $\sigma.$
+\begin{lem}
+	The union $U$ of $\{\sigma\}$ and of the principal syzygies is a GB
+	of the syzygies.
+\end{lem}
+\begin{proof}
+We show that any non-zero
+syzygy is reducible by
+an element of $U.$
+It will be enough to 
+conclude.
+\begin{fact}
+	If any non-zero
+syzygy is reducible by
+an element of $U$
+then $U$ is a GB 
+of the syzygy module.
+\end{fact}
+\begin{proof}
+The order on $\MM \left( \mathscr{F}_3 \right)$
+is isomorphic to $\NN.$
+Let us then enumerate
+increasingly the monomials
+of $\MM \left( \mathscr{F}_3 \right)$:
+$\alpha_1 < \alpha_2< \dots.$
+For any element $a=\sum_i c_i \alpha_i$ of 
+$\mathscr{F}_3,$
+we associate the integer
+$int(a)$:
+$\sum_{i \textrm{ s.t. } c_i \neq 0} 2^i.$
+Then any reduction
+corresponds to a decrease
+of $int.$
+Then, eventually,
+the $\LM$ of $a$
+will be reduced,
+and this is enough to conclure. 
+\end{proof}
+
+	Let $s$ be a non-zero syzygy.
+	
+	As the $g_i$'s are of the form $\alpha_i - \beta_i$, 
+	we can define
+	$$m := \min_{(l, \varepsilon_i, r) \mbox{ monomial of } s} l \beta_i r$$
+	
+	Since $\overline{s} = 0$, there is at least
+	two monomials $s$, $(l_1, i_1, r_1)$ and $(l_2, i_2, r_2)$ of $s$, such that $l_1 \beta_{i_1} r_1 = l_2 \beta_{i_2} r_2 = m$.
+	Then, $l_1 = l_2$ and $r_1 = r_2$ is not possible
+	as it would mean that 
+	$\beta_{i_1} = \beta_{i_2}$ and hence $i_1 = i_2$.
+	
+	If $\deg{l_1} \geq \deg{l_2 \beta_{i_2}}$ or $\deg{l_2} \geq \deg{l_1 \beta_{i_1}}$, then by
+	symmetry, we can assume that $m$ can be written:
+	$$m_1 \beta_{i_1} m_2 \beta_{i_2} m_3.$$
+	Consequently:
+	\begin{align*}
+		(l_1, i_1, r_1) &= (m_1, i_1, m_2 \beta_{i_2} m_3), \\
+		(l_2, i_2, r_2) &= (m_1 \beta_{i_1} m_2, i_2, m_3).
+	\end{align*}
+	Therefore, $s$ is reducible by the principal
+	syzygy:
+	$$m_1 (g_{i_1} (m_2, i_2, 1) - (1, i_1, m_2) g_{i_2}) m_3.$$
+	
+	Otherwise, two
+	occurences of $\beta_{i_1}$ and $\beta_{i_2}$ in $m$
+	have a non-empty intersection, which is not
+	a complete identity.
+	
+	It is only possible if $\{i_1, i_2\} = \{1, 3\}$.
+	By symmetry, let us
+	assume that $i_1 = 1$ and $i_2 = 3$. In that cas,
+	 $m$ can be written:
+	$$m_1 ta m_2.$$
+	Therefore:
+	\begin{align*}
+		(l_1, i_1, r_1) &= (m_1, \varepsilon_1, m_2), \\
+		(l_2, i_2, r_2) &= (m_1 t, \varepsilon_3, m_2).
+	\end{align*}
+	Hence, $s$ est reducible by the syzygy:
+	$$m_1 \sigma m_2.$$
+	
+	Consequently, any non-zero syzygy is divisible
+	by an element of $U,$
+	and this concludes the proof.
+\end{proof}
+
 
 \section{Implementation}
 
