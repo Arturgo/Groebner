@@ -83,6 +83,11 @@
 \renewcommand{\j}{\mathbf{j}}
 \renewcommand{\r}{\mathbf{r}}
 
+\newcommand\fixmecc[1]{{\color{red}{\underline{\bf C:}} #1}}
+
+% Macros report
+\newcommand{\M}{\mathcal{M}}
+
 \newcommand{\ifnonempty}[3]{%
   % IF #1 is empty THEN #3 ELSE #2
   \def\tempa{}%
@@ -280,7 +285,9 @@ $\MM \left( \mathscr{F}_r \right) $
 and the biggest monomial
 involved is its signature
 $\mathfrak{s}(\alpha) \in
-\mathscr{F}_r$. 
+\mathscr{F}_r$.
+\fixmecc{plutôt $\mathfrak{s}(\alpha) \in \MM (\mathscr{F}_r)$? Aussi définir
+$\mathfrak{s}(E)$ pour un sous ensemble $E$?}
 
 If $M \subset \mathscr{F}_r$
 is a $\KX$-submodule,
@@ -338,6 +345,116 @@ Gröbner basis} of $I^{[\Sigma]}$ if all
 $f^{[\alpha]} \in I^{[\Sigma]}$ $\mathfrak{s}$-reduce to zero by $G^{[\Sigma]}.$
 
 \section{Rationality}
+
+Looking at principal syzygies and the algorithm for computing new ones, we wonder if an automaton can recognize leading monomials of syzygies in the case where the Gröbner basis is finite. Let us show that this is not the case using the non regular language\linebreak $\{a^nb^n \;|\; n \in \N\}$. Let us consider the alphabet 
+$$\{a, b, c, d, e, s, t, x, y, z, \infty\}$$
+and polynomials
+\begin{align*}
+g_1 & := sa - tcx \\
+g_2 & := xa - ax \\
+g_3 & := xd - dx \\
+g_4 & := ya - ay \\
+g_5 & := yd - dy \\
+g_6 & := xbb - dyb \\
+g_7 & := cya - ccx \\
+g_8 & := xbe - dze \\
+g_9 & := dz - zb \\
+g_{10} & := cz - za \\
+g_{11} & := tz - s
+\end{align*}
+together with the order $m_1 < m_2$ if:
+\begin{itemize}
+\item there are less $\infty$ symbols in $m_1$ than in $m_2$,
+\item $m_1$ and $m_2$ have the same number of $\infty$ symbols and there are less $s$ symbols in $m_1$ than in $m_2$,
+\item $m_1$ and $m_2$ have the same numbers of $\infty$ and $s$ symbols, but
+$m_1 <_{deglex} m_2$ where\\ $a < b < c < d < x < y < z < e < t < s < \infty$.
+\end{itemize}
+
+\fixmecc{Given $l,r,l',r'\in\KX$, have (let?) $l\varepsilon_i r\leq l'\varepsilon_j r'$ if
+  \begin{itemize}
+  \item $l\LM(g_i)r < l'\LM(g_j)r'$
+  \item $l\LM(g_i)r = l'\LM(g_j)r'$ et $i < j$
+  \item $l\LM(g_i)r = l'\LM(g_j)r'$ et $i = j$ et $\deg{l} < \deg{l'}$.
+  \end{itemize}
+  The idea is that $s, t, e$ symbols take place at the ends of a word in order to handle the following operations between the first $a$ and the last $b$.
+  The first $a$ will transform and generate an $x$, other $a$'s will absorb a $y$, and generate an $x$ will transforming into a $c$.
+The last $b$ will absorb an $x$, generate a $z$ while transforming into a $d$, other $b$'s will absorb an $x$, generate a $y$ while transforming into a $d$.
+The $x$'s and $y$'s are messages which commute with $a$'s and $d$'s. A $x$ "dit" transmits the information to the border between $b$'s and $d$'s than an $a$ transformed into a $c$, while a $y$ transmits the information to the border between $a$'s and $c$'s than a $b$ transformed into a $d$. The objective being that in order to compare the numbers of $a$'s and $b$'s, there are the same number of transformations of each type.
+The $z$ is the message which enables us to transform $d$'s into $b$'s and $c$'s into $a$'s at the end of the procedure.
+We will explain latter the role played by $\infty$ symbol.
+}
+
+{\color{blue}{\bf\underline{Version française:}}  Nous avons $(l, i, r) \leq (l', j, r')$ si l'une des conditions ci-desous est vérifiée~:
+\begin{itemize}
+	\item $l\LM(g_i)r < l'\LM(g_j)r'$
+	\item $l\LM(g_i)r = l'\LM(g_j)r'$ et $i < j$
+	\item $l\LM(g_i)r = l'\LM(g_j)r'$ et $i = j$ et $\deg{l} < \deg{l'}$.
+\end{itemize}
+
+L'idée est que les deux symboles $s, t, e$ sont présents aux extrémités du mot pour pouvoir faire des opérations sur le premier $a$ ou sur le dernier $b$.
+Le premier $a$ va se transformer en $c$ en générant un $x$, les autres $a$ vont absorber un $y$, et générer un $x$ en se tranformant en $c$.
+Le dernier $b$ va absorber un $x$, générer un $z$ et se transformer en $d$, les autres $b$ vont absorber un $x$, et générer un $y$ en se transformant en $d$.
+Les $x$ et les $y$ sont des "messages" qui commutent avec les $a$ et les $d$. Un $x$ "dit" à la frontière entre les $b$ et les $d$ qu'un $a$ s'est transformé en $c$, alors qu'un $y$ "dit" à la frontière entre les $a$ et les $c$ qu'un $b$ s'est transformé en $d$, l'objectif étant que pour comparer le nombre de $a$ et de $b$, il y ait autant de transformations de chaque type.
+Le $z$ est le message qui permet de retransformer les $d$ en $b$ et les $c$ en $a$ à la fin du processus. On reparlera du rôle de $\infty$ plus tard.
+}
+
+For a better understanding, let us consider the case $n=2$. The monomial $\varepsilon_{11}a^2b^2e$ is a leading monomial od a syzygy because of the following sequence of equalities.
+\begin{align*}
+saabbe & =_{1} tcxabbe =_{2} tcaxbbe =_{6} tcadybe \\
+& =_{5} tcaydbe =_{4} tcyadbe =_{7} tccxdbe \\
+& =_{3} tccdxbe =_{8} tccddze =_{9} tccdzbe \\
+& =_{9} tcczbbe =_{10} tczabbe =_{10} tzaabbe \\
+& =_{11} saabbe
+\end{align*}
+
+
+\begin{proposition}
+  Leading monomials of syzygies of $F=\{g_1,\dots,g_{11}\}$ do not form a regular language
+\end{proposition}
+\begin{proof}
+  For every $n \geq 1$, $g_{11}a^nb^ne$ is the leading monomial of the syzygy:
+
+  \begin{align*}
+    g_1a^{n-1}b^ne & + \sum_{k = 2}^{n} tc^{k - 2}g_7a^{n - k}d^{k - 1}b^{n - k + 1}e \\
+    & + \sum_{k = 1}^{n - 1} tc^ka^{n - k}d^{k - 1}g_6b^{n - k - 1}e \\
+    & + c^nd^{n - 1}g_8 \\
+    & + g_{11}a^nb^ne \\
+    & + \sum_{k = 1}^n tc^nd^{n - k}g_9b^{k - 1}e \\
+    & + \sum_{k = 1}^n tc^{n - k}g_{10}a^{k - 1}b^ne \\
+    & + \sum_{k = 1}^{n} \sum_{l = 0}^{n - k - 1} tc^{k}a^{l}g_2a^{n - l - k - 1}d^{k - 1}b^{n - k + 1} e \\
+    & + \sum_{k = 1}^{n} \sum_{l = 0}^{k - 2} tc^{k}a^{n - k}d^lg_3d^{k - 2 - l}b^{n - k - 1}e \\
+    & + \sum_{k = 1}^{n - 1} \sum_{l = 0}^{k - 1} tc^{k}a^{n - k}d^lg_5d^{k - 1 - l}b^{n - k - 2}e \\
+    & + \sum_{k = 1}^{n - 1} \sum_{l = 0}^{n - k - 1} tc^{k}a^{l}g_4a^{n - l - k - 1}d^{k}b^{n - k} e. \\
+  \end{align*}
+
+  Now, let us show that leading monomials of syzygies of the form $\varepsilon_{11}a^nb^me$ are such that $n = m$.
+  Let $\sigma$ be such a syzygy and let $G$ be the graph whose vertices are elements of $\left\langle X \right\rangle$, and there is an edge between vertices of the form $lXr$ and $lYr$ as soon as $lg_ir$ occurs with a nonzero coefficient in $\sigma$ and $g_i=X - Y$. Let $W$ be the set of vertices of the following form:
+  \begin{align*}
+    & sa^nb^ne, \\
+    & tc^pa^qxa^rd^nb^me, \\
+    & tc^pa^qd^rxd^nb^me, \\
+    & tc^pa^qya^rd^nb^me, \\
+    & tc^pa^qd^ryd^nb^me, \\
+    & tc^pza^qb^re, \\
+    & tc^pd^qzb^re
+  \end{align*}
+  Each vertex in $W$ is related to at most two vertices, which also belong to $W$.
+  Hence, the connected component of $sa^nb^me$ in $G$ is either a chain or a cycle (\fixmecc{je n'ai pas compris l'argument}).
+  But since $\sigma$ is a syzygy, this connected component has to be a cycle, which implies $n = m$.
+
+  Now, we can conclude that the set $X$ of leading monomials of syzygies of $F$ does not form a regular language.
+  Indeed, by way of contradiction, assume that $X$ is a regular language, so that its
+  intersection with the regular language $\{g_{11}a^nb^me \;|\; n, m \geq 1\}$ also forms regular language.
+  We reach a contradiction since we proved that this intersection is $\{g_{11}a^nb^ne \;|\; n \geq 1 \}$, which does not form a regular language.
+\end{proof}
+
+Notice that $F=\{g_1,\dots,g_{11}\}$ has no reason to have a finite Gröbner basis. However, we construct a new set $F'$ by adding to $F$ the polynomial $\infty$ and all polynomials of the form $\infty-\alpha$, for letters $\alpha$ different from $\infty$. Then $F'$ admits the reduced Gröbner basis which contains each letter.
+Now, let $X$ and $Y$ be the sets of leading monomials of syzygies of $F$ and $F'$, respectively, and let 
+$$Z=\{l\varepsilon_ir \in \MM(\mathscr{F}_r) \;|\; l \LM(g_i) r \mbox{ does not contain } \infty\}.$$
+Since $X=Y\cap Z$, $Z$ is a regular language and $Z$ is not a regular language, $Y$ is not a regular language. Hence, we have constructed a set $F'$ of polynomials that admit a finite Gröbner basis whose set of leading monomials of syzygies does not form a regular language. Moreover, we can make the order \fixmecc{lequel?} isomorphic to $\N$
+by replacing $\infty$ and $s$  by $\infty^{10}$ and $s^5$, respectively car les degrés varient d'au plus une constante lors des réécritures contenues dans une syzygie \fixmecc{pas compris la justification :s}.
+
+
 
 \section{Algebraicity}
 
