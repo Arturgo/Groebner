@@ -286,8 +286,8 @@ and the biggest monomial
 involved is its signature
 $\mathfrak{s}(\alpha) \in
 \mathscr{F}_r$.
-\fixmecc{plutôt $\mathfrak{s}(\alpha) \in \MM (\mathscr{F}_r)$? Aussi définir
-$\mathfrak{s}(E)$ pour un sous ensemble $E$?}
+\fixmecc{c'est $\mathfrak{s}(\alpha) \in \MM (\mathscr{F}_r)$. Aussi définir
+$\mathfrak{s}(E)$ pour un sous ensemble $E$.}
 
 If $M \subset \mathscr{F}_r$
 is a $\KX$-submodule,
@@ -457,9 +457,7 @@ saabbe & =_{1} tcxabbe =_{2} tcaxbbe =_{6} tcadybe \\
 Notice that $F=\{g_1,\dots,g_{11}\}$ has no reason to have a finite Gröbner basis. However, we construct a new set $F'$ by adding to $F$ the polynomial $\infty$ and all polynomials of the form $\infty-\alpha$, for letters $\alpha$ different from $\infty$. Then $F'$ admits the reduced Gröbner basis which contains each letter.
 Now, let $X$ and $Y$ be the sets of leading monomials of syzygies of $F$ and $F'$, respectively, and let 
 $$Z=\{l\varepsilon_ir \in \MM(\mathscr{F}_r) \;|\; l \LM(g_i) r \mbox{ does not contain } \infty\}.$$
-Since $X=Y\cap Z$, $Z$ is a regular language and $Z$ is not a regular language, $Y$ is not a regular language. Hence, we have constructed a set $F'$ of polynomials that admit a finite Gröbner basis whose set of leading monomials of syzygies does not form a regular language. Moreover, we can make the order \fixmecc{lequel? les deux ordres sur les monômes et sur le module} isomorphic to $\N$
-by replacing $\infty$ and $s$  by $\infty^{10}$ and $s^5$, respectively car les degrés varient d'au plus une constante lors des réécritures contenues dans une syzygie \fixmecc{pas compris la justification :s}.
-
+Since $X=Y\cap Z$ \fixmecc{justifier cette formule}, $Z$ is a regular language and $X$ is not a regular language, $Y$ is not a regular language. Hence, we have constructed a set $F'$ of polynomials that admit a finite Gröbner basis whose set of leading monomials of syzygies does not form a regular language. 
 
 
 \section{Context free}
