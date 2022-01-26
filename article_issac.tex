@@ -344,11 +344,12 @@ is called a \textit{signature
 Gröbner basis} of $I^{[\Sigma]}$ if all
 $f^{[\alpha]} \in I^{[\Sigma]}$ $\mathfrak{s}$-reduce to zero by $G^{[\Sigma]}.$
 
-\section{Rationality}
+\section{Regular}
 
 Looking at principal syzygies and the algorithm for computing new ones, we wonder if an automaton can recognize leading monomials of syzygies in the case where the Gröbner basis is finite. Let us show that this is not the case using the non regular language\linebreak $\{a^nb^n \;|\; n \in \N\}$. Let us consider the alphabet 
 $$\{a, b, c, d, e, s, t, x, y, z, \infty\}$$
 and polynomials
+\fixmecc{s -S ss partout}
 \begin{align*}
 g_1 & := sa - tcx \\
 g_2 & := xa - ax \\
@@ -360,9 +361,10 @@ g_7 & := cya - ccx \\
 g_8 & := xbe - dze \\
 g_9 & := dz - zb \\
 g_{10} & := cz - za \\
-g_{11} & := tz - s
+g_{11} & := s-tz
 \end{align*}
 together with the order $m_1 < m_2$ if:
+\fixmecc{on compare d'abord par degrés}
 \begin{itemize}
 \item there are less $\infty$ symbols in $m_1$ than in $m_2$,
 \item $m_1$ and $m_2$ have the same number of $\infty$ symbols and there are less $s$ symbols in $m_1$ than in $m_2$,
@@ -370,12 +372,16 @@ together with the order $m_1 < m_2$ if:
 $m_1 <_{deglex} m_2$ where\\ $a < b < c < d < x < y < z < e < t < s < \infty$.
 \end{itemize}
 
+\fixmecc{dire que cet ordre est fair}
+
 \fixmecc{Given $l,r,l',r'\in\KX$, have (let?) $l\varepsilon_i r\leq l'\varepsilon_j r'$ if
   \begin{itemize}
   \item $l\LM(g_i)r < l'\LM(g_j)r'$
   \item $l\LM(g_i)r = l'\LM(g_j)r'$ et $i < j$
   \item $l\LM(g_i)r = l'\LM(g_j)r'$ et $i = j$ et $\deg{l} < \deg{l'}$.
   \end{itemize}
+      {\bf dire que l'ordre est fair}
+      
   The idea is that $s, t, e$ symbols take place at the ends of a word in order to handle the following operations between the first $a$ and the last $b$.
   The first $a$ will transform and generate an $x$, other $a$'s will absorb a $y$, and generate an $x$ will transforming into a $c$.
 The last $b$ will absorb an $x$, generate a $z$ while transforming into a $d$, other $b$'s will absorb an $x$, generate a $y$ while transforming into a $d$.
@@ -398,7 +404,7 @@ Les $x$ et les $y$ sont des "messages" qui commutent avec les $a$ et les $d$. Un
 Le $z$ est le message qui permet de retransformer les $d$ en $b$ et les $c$ en $a$ à la fin du processus. On reparlera du rôle de $\infty$ plus tard.
 }
 
-For a better understanding, let us consider the case $n=2$. The monomial $\varepsilon_{11}a^2b^2e$ is a leading monomial od a syzygy because of the following sequence of equalities.
+For a better understanding, let us consider the case $n=2$. The monomial $\varepsilon_{11}a^2b^2e$ is a leading monomial of a syzygy because of the following sequence of equalities.
 \begin{align*}
 saabbe & =_{1} tcxabbe =_{2} tcaxbbe =_{6} tcadybe \\
 & =_{5} tcaydbe =_{4} tcyadbe =_{7} tccxdbe \\
@@ -439,7 +445,7 @@ saabbe & =_{1} tcxabbe =_{2} tcaxbbe =_{6} tcadybe \\
     & tc^pd^qzb^re
   \end{align*}
   Each vertex in $W$ is related to at most two vertices, which also belong to $W$.
-  Hence, the connected component of $sa^nb^me$ in $G$ is either a chain or a cycle (\fixmecc{je n'ai pas compris l'argument}).
+  Hence, the connected component of $sa^nb^me$ in $G$ is either a chain or a cycle (\fixmecc{écrire la phrase explicitement}).
   But since $\sigma$ is a syzygy, this connected component has to be a cycle, which implies $n = m$.
 
   Now, we can conclude that the set $X$ of leading monomials of syzygies of $F$ does not form a regular language.
@@ -451,12 +457,12 @@ saabbe & =_{1} tcxabbe =_{2} tcaxbbe =_{6} tcadybe \\
 Notice that $F=\{g_1,\dots,g_{11}\}$ has no reason to have a finite Gröbner basis. However, we construct a new set $F'$ by adding to $F$ the polynomial $\infty$ and all polynomials of the form $\infty-\alpha$, for letters $\alpha$ different from $\infty$. Then $F'$ admits the reduced Gröbner basis which contains each letter.
 Now, let $X$ and $Y$ be the sets of leading monomials of syzygies of $F$ and $F'$, respectively, and let 
 $$Z=\{l\varepsilon_ir \in \MM(\mathscr{F}_r) \;|\; l \LM(g_i) r \mbox{ does not contain } \infty\}.$$
-Since $X=Y\cap Z$, $Z$ is a regular language and $Z$ is not a regular language, $Y$ is not a regular language. Hence, we have constructed a set $F'$ of polynomials that admit a finite Gröbner basis whose set of leading monomials of syzygies does not form a regular language. Moreover, we can make the order \fixmecc{lequel?} isomorphic to $\N$
+Since $X=Y\cap Z$, $Z$ is a regular language and $Z$ is not a regular language, $Y$ is not a regular language. Hence, we have constructed a set $F'$ of polynomials that admit a finite Gröbner basis whose set of leading monomials of syzygies does not form a regular language. Moreover, we can make the order \fixmecc{lequel? les deux ordres sur les monômes et sur le module} isomorphic to $\N$
 by replacing $\infty$ and $s$  by $\infty^{10}$ and $s^5$, respectively car les degrés varient d'au plus une constante lors des réécritures contenues dans une syzygie \fixmecc{pas compris la justification :s}.
 
 
 
-\section{Algebraicity}
+\section{Context free}
 
 \section{Finiteness}
 
