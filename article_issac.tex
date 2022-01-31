@@ -468,22 +468,25 @@ Since $X=Y\cap Z$ \fixmecc{justifier cette formule}, $Z$ is a regular language a
 \begin{align*}
 g_1 & := ssa - t\alpha x \\ 
 g_2 & := xa - ax \\ 
-g_3 & := xbb - \beta yb\\ 
+g_{11} & := x\beta-\beta x\\ 
+g_{12} & := xb-\beta y \\ 
+%g_3 & := xbb - \beta yb\\ 
+% Inutile, redondante avec g_12
 g_4 & := yb-by\\ 
+g_{13} & := y\gamma-\gamma y \\
 g_5 & := ycc-\gamma zc \\ 
 g_6 & :=  \gamma z-z\gamma\\ 
 g_7 & := bz-zb \\
 g_8 & := \beta z-z\beta \\
 g_9 & := az-za \\ 
 g_{10} & := \alpha za-\alpha\alpha x  \\ 
-g_{11} & := x\beta-\beta x\\ 
-g_{12} & := xb-\beta y \\ 
-g_{13} & := y\gamma-\gamma y \\
+g_{19} & := yce - \gamma oe \\
 g_{14} & := \gamma o-oc \\
-g_{15} & := oc-\gamma o \\ 
+%g_{15} & := oc-\gamma o \\ 
+% Inutile, redondante avec g_14
 g_{16} & := \beta o-ob \\ 
 g_{17} & := \alpha o-oa \\ 
-g_{18} & := to-ss 
+g_{18} & := to-ss
 \end{align*}
 
 
