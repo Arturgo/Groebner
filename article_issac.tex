@@ -438,7 +438,7 @@ ssaabbe & =_{1} tcxabbe =_{2} tcaxbbe =_{6} tcadybe \\
   \end{align*}
 
   Now, let us show that leading monomials of syzygies of the form $\varepsilon_{11}a^nb^me$ are such that $n = m$.
-  Let $\sigma$ be such a syzygy and let $G$ be the graph whose vertices are elements of $\left\langle X \right\rangle$, and there is an edge between vertices of the form $lXr$ and $lYr$ as soon as $lg_ir$ occurs with a nonzero coefficient in $\sigma$ and $g_i=X - Y$. Let $W$ be the set of vertices of the following form:
+  Let $\sigma$ be such a syzygy and let $G$ be the graph whose vertices are elements of $\left\langle X \right\rangle$, and there is an edge between vertices of the form $l\omega r$ and $l\omega'r$ as soon as $lg_ir$ occurs with a nonzero coefficient in $\sigma$ and $g_i=\omega - \omega'$. Let $W$ be the set of vertices of the following form:
   \begin{align*}
     & ssa^nb^ne, \\
     & tc^pa^qxa^rd^nb^me, \\
@@ -450,17 +450,33 @@ ssaabbe & =_{1} tcxabbe =_{2} tcaxbbe =_{6} tcadybe \\
   \end{align*}
   Each vertex in $W$ is related to at most two vertices, which also belong to $W$. When an undirected graph is such that each vertex is related to at most two vertices, each connected component is either a chain or cycle, so that the connected component of $ssa^nb^me$ in $G$ is either a chain or a cycle.
   But since $\sigma$ is a syzygy, this connected component has to be a cycle, which implies $n = m$.
-
-  Now, we can conclude that the set $X$ of leading monomials of syzygies of $F$ does not form a regular language.
-  Indeed, by way of contradiction, assume that $X$ is a regular language, so that its
+  Let $\mathscr{C}$ be defined by:
+$$\mathscr{C}=\{l\varepsilon_ir \in \MM(\mathscr{F}_r) \;|\; l \LM(g_i) r \mbox{ does not contain } \infty\}.$$
+   Let $\mathscr{A}$ be the set of leading monomials of syzygies of $F$.
+   Now, we can conclude that the set $\mathscr{A} \cap \mathscr{C}$ does not form a regular language.
+  Indeed, by way of contradiction, assume that $\mathscr{A}\cap \mathscr{C}$ is a regular language. Then its
   intersection with the regular language $\{g_{11}a^nb^me \;|\; n, m \geq 1\}$ also forms regular language.
   We reach a contradiction since we proved that this intersection is $\{g_{11}a^nb^ne \;|\; n \geq 1 \}$, which does not form a regular language.
 \end{proof}
 
 Notice that $F=\{g_1,\dots,g_{11}\}$ has no reason to have a finite Gröbner basis. However, we construct a new set $F'$ by adding to $F$ the polynomial $\infty$ and all polynomials of the form $\infty-\alpha$, for letters $\alpha$ different from $\infty$. Then $F'$ admits the reduced Gröbner basis which contains each letter.
-Now, let $X$ and $Y$ be the sets of leading monomials of syzygies of $F$ and $F'$, respectively, and let 
-$$Z=\{l\varepsilon_ir \in \MM(\mathscr{F}_r) \;|\; l \LM(g_i) r \mbox{ does not contain } \infty\}.$$
-Since $X=Y\cap Z$ \fixmecc{justifier cette formule}, $Z$ is a regular language and $X$ is not a regular language, $Y$ is not a regular language. Hence, we have constructed a set $F'$ of polynomials that admit a finite Gröbner basis whose set of leading monomials of syzygies does not form a regular language. 
+Now, let $\mathscr{B}$ be the sets of leading monomials of syzygies of $F'$.
+As our ideal is homogeneous,
+the set of the
+leading monomials of the syzygies
+is the same as the set of the leading
+monomials of the homogeneous syzygies.
+Thanks to the way we defined our order,
+if $\sigma \in Syz(F')$ is homogeneous,
+and
+if $\infty$ appears in a $l \LM(g_i) r$,
+for some $l \varepsilon_i r$ 
+a term of $\sigma.$ 
+then 
+$\infty$ appears in $l' \LM(g_j) r'$
+where $l' \varepsilon_j r'$ is the $\LM$
+of $\sigma.$
+Thus $\mathscr{A} \cap \mathscr{C}=\mathscr{B} \cap \mathscr{C}$. Since $\mathscr{C}$ is a regular language and $\mathscr{A} \cap \mathscr{C}$ is not a regular language, $\mathscr{B}$ is not a regular language. Hence, we have constructed a set $F'$ of polynomials that admit a finite Gröbner basis whose set of leading monomials of syzygies does not form a regular language. 
 
 
 \section{Context free}
