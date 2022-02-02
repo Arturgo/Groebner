@@ -419,7 +419,8 @@ ssaabbe & =_{1} tcxabbe =_{2} tcaxbbe =_{6} tcadybe \\
 
 
 \begin{proposition}
-  Leading monomials of syzygies of $F=\{g_1,\dots,g_{11}\}$ do not form a regular language
+  Leading monomials of syzygies of $F=\{g_1,\dots,g_{11}\}$ do not form a regular language.
+  \label{prop:exp_pas_regulier}
 \end{proposition}
 \begin{proof}
   For every $n \geq 1$, $g_{11}a^nb^ne$ is the leading monomial of the syzygy:
@@ -459,6 +460,14 @@ $$\mathscr{C}=\{l\varepsilon_ir \in \MM(\mathscr{F}_r) \;|\; l \LM(g_i) r \mbox{
   We reach a contradiction since we proved that this intersection is $\{g_{11}a^nb^ne \;|\; n \geq 1 \}$, which does not form a regular language.
 \end{proof}
 
+\begin{cor}
+There is a set $F'$ of polynomials which
+admits a finite Gröbner basis
+and whose set of leading monomials of syzygies does not form a regular language. 
+\end{cor}
+\begin{proof}
+We carry on with the notations of Prop. \ref{prop:exp_pas_regulier} and
+its proof.
 Notice that $F=\{g_1,\dots,g_{11}\}$ has no reason to have a finite Gröbner basis. However, we construct a new set $F'$ by adding to $F$ the polynomial $\infty$ and all polynomials of the form $\infty-\alpha$, for letters $\alpha$ different from $\infty$. Then $F'$ admits the reduced Gröbner basis which contains each letter.
 Now, let $\mathscr{B}$ be the sets of leading monomials of syzygies of $F'$.
 As our ideal is homogeneous,
@@ -477,6 +486,7 @@ $\infty$ appears in $l' \LM(g_j) r'$
 where $l' \varepsilon_j r'$ is the $\LM$
 of $\sigma.$
 Thus $\mathscr{A} \cap \mathscr{C}=\mathscr{B} \cap \mathscr{C}$. Since $\mathscr{C}$ is a regular language and $\mathscr{A} \cap \mathscr{C}$ is not a regular language, $\mathscr{B}$ is not a regular language. Hence, we have constructed a set $F'$ of polynomials that admit a finite Gröbner basis whose set of leading monomials of syzygies does not form a regular language. 
+\end{proof}
 
 
 \section{Context free}
