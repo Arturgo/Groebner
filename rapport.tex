@@ -433,6 +433,50 @@ Décider si $(l, i, r)$ est un monôme dominant de syzygie revient à décider s
 
 En revanche, si l'ordre monomial n'est pas isomorphe à $\N$, alors il n'existe pas forcément d'algorithme pour décider si un triplet $(l, i, r)$ est un monôme dominant de syzygie. Nous avons en effet trouvé une construction qui ramène ce problème au problème de l'arrêt.
 
+Soit $m_1, \dots, m_n$ les différents états d'une machine de Turing, son ruban de travail est constitué des symboles $0$ et $1$. On suppose que la machine de Turing termine si et seulement si elle atteint l'état $m_n$.
+
+Considérons~:
+$$\Sigma := \{l_1, \dots, l_n, l_1', \dots, l_n', 
+r_1, \dots, r_n, r_1', \dots, r_n', 0, 1, 0', 1', s, e,
+u^r_1, \dots, u^r_n,
+u^l_1, \dots, u^l_n, \infty\}$$
+
+Avec $u^r_n = r_n$ et  $u^l_n = l_n$ .
+
+Les règles d'exécution de la machine de Turing déterministe sont de la forme $(m_i, a) \rightarrow (m_j, b, d)$ où $a, b \in \{0, 1\}$ et $d$ est un déplacement à gauche ou à droite.
+
+Pour une telle règle, on rajoute donc~:
+\begin{itemize}
+\item Si le déplacement est à droite~:
+\begin{align*}
+r_i a &- r_i' a' b r_j \\
+a l_i &- l_i' a' b r_j \\
+u^r_i a &- r_i' a' b u^r_j \\
+a u^l_i &- l_i' a' b u^r_j
+\end{align*}
+\item Si le déplacement est à gauche~:
+\begin{align*}
+r_i a &- r_i' a' l_j b \\
+a l_i &- l_i' a' l_j b \\
+u^r_i a &- r_i' a' u^l_j b \\
+a u^l_i &- l_i' a' u^l_j b
+\end{align*}
+\end{itemize}
+
+Les $l_i, r_i, u^l_i, u^r_i$ commutent avec les $l_i', r_i', 0', 1'$.
+
+On rajoute de plus les règles~:
+\begin{align*}
+r_i e &- r_i 0 e \\
+u^r_i e &- u^r_i 0 e \\
+s r_1 e &- s \infty e \\
+s u^r_1 e &- s \infty e
+\end{align*}
+
+Ainsi, une suite de réécriture à partir de $s r_1 e$ peut-être vu comme une exécution de la machine de Turing avec historique sur le ruban vide. Décider si une telle machine de Turing s'arête est bien sur indécidable.
+
+Ainsi, $s \infty e$ correspond à un monôme dominant de syzygie si et seulement si la machine de Turing s'arrête sur le ruban vide.
+
 \section*{Conclusion}
 
 La motivation de départ, qui était d'adapter l'algorithme GVW au cadre non-commutatif, s'est révélé être un problème plus hardu que prévu ; après avoir posé des définitions qui découlaient naturellement du cadre commutatif, nous nous sommes rendus compte que le point central de l'algorithme, c'est à dire le calcul de la base de Gröbner forte, ne terminait pas. Nous avons alors essayé de démontrer des obstructions à la terminaison d'un algorithme naïf à signature, objectif que nous avons partiellement réussi.
