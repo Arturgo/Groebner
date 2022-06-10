@@ -808,6 +808,90 @@ and this is enough to conclure.
 	and this concludes the proof.
 \end{proof}
 
+\section{A case of finite GB for the syzygy module}
+
+Because of the amount of 
+trivial syzygies (of the form $\varepsilon_i A f_j-f_i A \varepsilon_j$),
+it is often the case that the module of syzygys
+has no finite GB, as remarked 
+in $\sec 4.3$ of \cite{HV21}. 
+One of the authors of this article 
+conjectured in a presentation at the 
+Journées Nationales du Calcul Formel
+(\url{https://www.cirm-math.fr/RepOrga/2568/Slides/verron.pdf})
+that it was always the case for $n>1$
+(non-commutative case) and $r>1$ (non-principal ideal).
+We present here a counter-example.
+
+
+Let $(f_1,f_2)=(x-y,y^2) \in \mathbb{Q} \left\langle x,y \right\rangle^2,$
+equipped with the \textit{deglex} monomial ordering $\leq.$
+We prove that $Syz(f_1,f_2)$ admits a finite GB 
+for the following module ordering: for $a_1 \varepsilon_{i_1} b_1, a_2 \varepsilon_{i_2} b_2 \in \MM \left( \mathscr{F}_2 \right)$, we say that  $a_1 \varepsilon_{i_1} b_1 \leq a_2 \varepsilon_{i_2} b_2$ if:
+\begin{enumerate}
+\item $a_1<a_2$.
+\item $a_1=a_2$ and $b_1 < b_2,$
+\item $a_1=a_2,$ $b_1 = b_2,$ and $i_1 \leq i_2.$
+\end{enumerate}
+
+We then have the following fact:
+\begin{itemize}
+\item $s_1=\underline{xy \varepsilon_2}+\varepsilon_2 y^2+ x \varepsilon_1 y^2+y \varepsilon_1 y^2+ \varepsilon_1 x y^2 \in Syz(f_1,f_2)$,
+\item $s_2=\underline{xy \varepsilon_1}-yx\varepsilon_1 -  \varepsilon_1 x^2+y \varepsilon_1 xy \in Syz(f_1,f_2)$.
+\end{itemize}
+In addition, the following are trivial syzygys:
+
+\begin{itemize}
+\item $s_3=\underline{x \varepsilon_1}-y\varepsilon_1- \varepsilon_1 x + \varepsilon_1 y \in Syz(f_1,f_2)$,
+\item $s_4=\underline{y^2 \varepsilon_1}-\varepsilon_2 x +  \varepsilon_2 y \in Syz(f_1,f_2)$.
+\item $s_5=\underline{x \varepsilon_2}-y\varepsilon_2- y^2 \varepsilon_2  \in Syz(f_1,f_2)$,
+\item $s_6=\underline{y^2 \varepsilon_2}-\varepsilon_2 y^2 \in Syz(f_1,f_2)$.
+\end{itemize}
+
+We then state that:
+\begin{lem}
+The module of syzygys $Syz(f_1,f_2)$ admits $(s_1,\dots,s_6)$
+as a Gröbner basis.
+\end{lem}
+\begin{proof}
+Let $m=a \varepsilon_1 b \in \MM \left( \mathscr{F}_2 \right)$
+be a leading monomial of a syzygy $s$.
+Then we distinguish the following cases.
+\begin{enumerate}
+\item If $a = \dots x$ then $m$ is divisible by $\LM(s_3).$
+\item If $a = \dots xy$ then $m$ is divisible by $\LM(s_2).$
+\item If $a = \dots y^2$ then $m$ is divisible by $\LM(s_4).$
+\item If $a = y,$ then $s = y \varepsilon_1 u+  \varepsilon_1 v + \varepsilon_2 w$ for some polynomials $u,v,w.$
+Applying $\overline{\cdot}$ (mapping $\varepsilon_i$ to $f_i$), we 
+obtain that $u=v=w=0$ which is a contradiction.
+\item If $a = 1,$ then $s = \varepsilon_1 u+  \varepsilon_2 v $ for some polynomials $u,v.$
+Again, applying $\overline{\cdot}$, we 
+obtain that $u=v=0$ which is a contradiction.
+\end{enumerate}
+Similarly, let $m=a \varepsilon_2 b \in \MM \left( \mathscr{F}_2 \right)$
+be a leading monomial of a syzygy $s$. Then:
+\begin{enumerate}
+\item If $a = \dots x$ then $m$ is divisible by $\LM(s_5).$
+\item If $a = \dots xy$ then $m$ is divisible by $\LM(s_1).$
+\item If $a = \dots y^2$ then $m$ is divisible by $\LM(s_6).$
+\item If $a = y,$ we obtain a contradiction.
+\item If $a = 1,$ we also obtain a contradiction.
+\end{enumerate}
+
+In conclusion, the leading monomials in $Syz(f_1,f_2)$
+are of one of the following forms, for some $i=1,2$, $\alpha, \beta \in \left\langle x,y \right\rangle$:
+\begin{itemize}
+\item $\alpha x \varepsilon_i \beta,$
+\item $\alpha xy \varepsilon_i \beta,$
+\item $\alpha y^2 \varepsilon_i \beta,$
+\end{itemize}
+which are all divisible by some $\LM(s_j).$
+This concludes the proof.
+\end{proof}
+
+Non-homogeneous polynomials leading to degree falls 
+can certainly expand 
+this example to higher degrees.
 
 \section{Implementation}
 
