@@ -836,7 +836,7 @@ for the following module ordering: for $a_1 \varepsilon_{i_1} b_1, a_2 \varepsil
 
 We then have the following fact:
 \begin{itemize}
-\item $s_1=\underline{xy \varepsilon_2}+\varepsilon_2 y^2+ x \varepsilon_1 y^2+y \varepsilon_1 y^2+ \varepsilon_1 x y^2 \in Syz(f_1,f_2)$,
+\item $s_1=\underline{xy \varepsilon_2}-\varepsilon_2 y^2+ x \varepsilon_1 y^2-y \varepsilon_1 y^2- \varepsilon_1 x y^2 \in Syz(f_1,f_2)$,
 \item $s_2=\underline{xy \varepsilon_1}-yx\varepsilon_1 -  \varepsilon_1 x^2+y \varepsilon_1 xy \in Syz(f_1,f_2)$.
 \end{itemize}
 In addition, the following are trivial syzygys:
@@ -863,7 +863,15 @@ Then we distinguish the following cases.
 \item If $a = \dots y^2$ then $m$ is divisible by $\LM(s_4).$
 \item If $a = y,$ then $s = y \varepsilon_1 u+  \varepsilon_1 v + \varepsilon_2 w$ for some polynomials $u,v,w.$
 Applying $\overline{\cdot}$ (mapping $\varepsilon_i$ to $f_i$), we 
-obtain that $u=v=w=0$ which is a contradiction.
+obtain that $y (x-y) u+  (x-y) v + y^2 w=0.$
+On the left hand-side, the polynomial $xv$ contains all the monomials
+with prefix $x$, which implies 
+that no cancellation with other terms can occur,
+and then $v=0.$
+Similarly, $yxu$ contains all the monomials
+with prefix $yx$, which then implies that
+$u=0$ and then $y^2 w=0$ and $w=0$, and we get
+a contradiction.
 \item If $a = 1,$ then $s = \varepsilon_1 u+  \varepsilon_2 v $ for some polynomials $u,v.$
 Again, applying $\overline{\cdot}$, we 
 obtain that $u=v=0$ which is a contradiction.
