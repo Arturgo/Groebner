@@ -827,24 +827,33 @@ We present here a counter-example.
 Let $(f_1,f_2)=(x-y,y^2) \in \mathbb{Q} \left\langle x,y \right\rangle^2,$
 equipped with the \textit{deglex} monomial ordering $\leq.$
 We prove that $Syz(f_1,f_2)$ admits a finite GB 
-for the following module ordering: for $a_1 \varepsilon_{i_1} b_1, a_2 \varepsilon_{i_2} b_2 \in \MM \left( \mathscr{F}_2 \right)$, we say that  $a_1 \varepsilon_{i_1} b_1 \leq a_2 \varepsilon_{i_2} b_2$ if:
+for the following module ordering: for $a_1 \varepsilon_{i_1} b_1, a_2
+\varepsilon_{i_2} b_2 \in \MM \left( \mathscr{F}_2 \right)$, we say that  $a_1
+\varepsilon_{i_1} b_1 < a_2 \varepsilon_{i_2} b_2$ if one of the following
+conditions holds:
 \begin{enumerate}
 \item $a_1<a_2$.
 \item $a_1=a_2$ and $b_1 < b_2,$
-\item $a_1=a_2,$ $b_1 = b_2,$ and $i_1 \leq i_2.$
+\item $a_1=a_2,$ $b_1 = b_2,$ and $i_1 < i_2.$
 \end{enumerate}
 
 We then have the following fact:
 \begin{itemize}
 \item $s_1=\underline{xy \varepsilon_2}-\varepsilon_2 y^2+ x \varepsilon_1 y^2-y \varepsilon_1 y^2- \varepsilon_1 x y^2 \in Syz(f_1,f_2)$,
-\item $s_2=\underline{xy \varepsilon_1}-yx\varepsilon_1 -  \varepsilon_1 x^2+y \varepsilon_1 xy \in Syz(f_1,f_2)$.
+\item $s_2=\underline{xy \varepsilon_1}-yx\varepsilon_1 -  \varepsilon_1 x^2+y
+  \varepsilon_1 xy \in Syz(f_1,f_2)$.
+\fixmecc{j'ai l'impression que ce n'est pas une syzygie. On peut prendre à la
+  place $s_2=\underline{xy\varepsilon_1}-\varepsilon_1yx+x\varepsilon_2-\varepsilon_2x$}  
 \end{itemize}
 In addition, the following are trivial syzygys:
 
 \begin{itemize}
 \item $s_3=\underline{x \varepsilon_1}-y\varepsilon_1- \varepsilon_1 x + \varepsilon_1 y \in Syz(f_1,f_2)$,
 \item $s_4=\underline{y^2 \varepsilon_1}-\varepsilon_2 x +  \varepsilon_2 y \in Syz(f_1,f_2)$.
-\item $s_5=\underline{x \varepsilon_2}-y\varepsilon_2- y^2 \varepsilon_2  \in Syz(f_1,f_2)$,
+\item $s_5=\underline{x \varepsilon_2}-y\varepsilon_2- y^2 \varepsilon_2  \in
+  Syz(f_1,f_2)$,
+  \fixmecc{ce ne serait pas plutôt
+    $\underline{x\varepsilon_2}-y\varepsilon_2-\varepsilon_1y^2$?} 
 \item $s_6=\underline{y^2 \varepsilon_2}-\varepsilon_2 y^2 \in Syz(f_1,f_2)$.
 \end{itemize}
 
@@ -882,7 +891,8 @@ be a leading monomial of a syzygy $s$. Then:
 \item If $a = \dots x$ then $m$ is divisible by $\LM(s_5).$
 \item If $a = \dots xy$ then $m$ is divisible by $\LM(s_1).$
 \item If $a = \dots y^2$ then $m$ is divisible by $\LM(s_6).$
-\item If $a = y,$ we obtain a contradiction.
+\item If $a = y,$ we obtain a contradiction \fixmecc{on peut avoir
+  $\underline{y\varepsilon_2}-\varepsilon_2y$, mais c'est une syzygie principale}.
 \item If $a = 1,$ we also obtain a contradiction.
 \end{enumerate}
 
