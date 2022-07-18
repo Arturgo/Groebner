@@ -337,9 +337,9 @@ such that:
 \begin{itemize}
 \item $a \LM(h)b \in supp(f),$
 \item $\mathfrak{s}(a \gamma b) \leq \mathfrak{s}(\alpha),$ and
-\item $g^{[\beta]}=f^{[\alpha]}-\frac{coeff(f,a \LM(h)b}{\LC(g)} a h^{[\gamma]}b.$
+\item $g^{[\beta]}=f^{[\alpha]}-\frac{\text{coeff}(f,a \LM(h)b)}{\LC(g)} a h^{[\gamma]}b.$
 \end{itemize}
-Reduction by a set $G^{[\Sigma]} \in I^{[\Sigma]}$
+Reduction by a set $G^{[\Sigma]} \subset I^{[\Sigma]}$
 is then defined as the 
 reflexive, transitive closure
 of the reduction by elements
@@ -839,22 +839,22 @@ conditions holds:
 
 We then have the following fact:
 \begin{itemize}
-\item $s_1=\underline{xy \varepsilon_2}-\varepsilon_2 y^2+ x \varepsilon_1 y^2-y \varepsilon_1 y^2- \varepsilon_1 x y^2 \in Syz(f_1,f_2)$,
-\item $s_2=\underline{xy\varepsilon_1}-\varepsilon_1yx+x\varepsilon_2-\varepsilon_2x \in Syz(f_1,f_2)$. 
+%\item $s_1=\underline{xy \varepsilon_2}-\varepsilon_2 y^2+ x \varepsilon_1 y^2-y \varepsilon_1 y^2- \varepsilon_1 x y^2 \in Syz(f_1,f_2)$,
+\item $s_1=\underline{xy\varepsilon_1}-\varepsilon_1yx+x\varepsilon_2-\varepsilon_2x \in Syz(f_1,f_2)$,
+\item $s_2=\underline{y \varepsilon_2}-\varepsilon_2 y \in Syz(f_1,f_2)$. 
 \end{itemize}
 In addition, the following are trivial syzygys:
 
 \begin{itemize}
-\item $s_3=\underline{x\varepsilon_2}-y\varepsilon_2-\varepsilon_1y^2  \in
+\item $s_3=\underline{x \varepsilon_1}-y\varepsilon_1- \varepsilon_1 x + \varepsilon_1 y \in Syz(f_1,f_2)$,
+\item $s_4=\underline{y^2 \varepsilon_1}-\varepsilon_2 x +  \varepsilon_2 y \in Syz(f_1,f_2)$,
+\item $s_5=\underline{x\varepsilon_2}-y\varepsilon_2-\varepsilon_1y^2  \in
   Syz(f_1,f_2)$,
-\item $s_4=\underline{y^2 \varepsilon_2}-\varepsilon_2 y^2 \in Syz(f_1,f_2)$,
-\item $s_5=\underline{x \varepsilon_1}-y\varepsilon_1- \varepsilon_1 x + \varepsilon_1 y \in Syz(f_1,f_2)$,
-\item $s_6=\underline{y^2 \varepsilon_1}-\varepsilon_2 x +  \varepsilon_2 y \in Syz(f_1,f_2)$.
 \end{itemize}
 
 We then state that:
 \begin{lem}
-The module of syzygys $Syz(f_1,f_2)$ admits $(s_1,\dots,s_6)$
+The module of syzygys $Syz(f_1,f_2)$ admits $(s_1,\dots,s_5)$
 as a Gröbner basis.
 \end{lem}
 \begin{proof}
@@ -862,13 +862,13 @@ Let $m=a \varepsilon_1 b \in \MM \left( \mathscr{F}_2 \right)$
 be a leading monomial of a syzygy $s$.
 Then we distinguish the following cases.
 \begin{enumerate}
-\item If $a = \dots x$ then $m$ is divisible by $\LM(s_5).$
-\item If $a = \dots xy$ then $m$ is divisible by $\LM(s_2).$
-\item If $a = \dots y^2$ then $m$ is divisible by $\LM(s_6).$
+\item If $a = \dots x$ then $m$ is divisible by $\LM(s_3).$
+\item If $a = \dots xy$ then $m$ is divisible by $\LM(s_1).$
+\item If $a = \dots y^2$ then $m$ is divisible by $\LM(s_4).$
 \item If $a = y,$ then $s = y \varepsilon_1 u+  \varepsilon_1 v + \varepsilon_2 w$ for some polynomials $u,v,w.$
 Applying $\overline{\cdot}$ (mapping $\varepsilon_i$ to $f_i$), we 
 obtain that $y (x-y) u+  (x-y) v + y^2 w=0.$
-On the left hand-side, the polynomial $xv$ contains all the monomials
+On the left-hand side, the polynomial $xv$ contains all the monomials
 with prefix $x$, which implies 
 that no cancellation with other terms can occur,
 and then $v=0.$
@@ -877,18 +877,21 @@ with prefix $yx$, which then implies that
 $u=0$ and then $y^2 w=0$ and $w=0$, and we get
 a contradiction.
 \item If $a = 1,$ then $s = \varepsilon_1 u+  \varepsilon_2 v $ for some polynomials $u,v.$
-Again, applying $\overline{\cdot}$, we 
-obtain that $u=v=0$ which is a contradiction.
+Applying $\overline{\cdot}$, we 
+obtain that $xu-yu+y^2v=0.$ On the left-hand side, 
+the polynomial $xu$ contains all the monomials
+with prefix $x$, which implies 
+that no cancellation with other terms can occur,
+and then $u=0,$ and consequently, $v=0$, which is a contradiction.
 \end{enumerate}
 Similarly, let $m=a \varepsilon_2 b \in \MM \left( \mathscr{F}_2 \right)$
 be a leading monomial of a syzygy $s$. Then:
 \begin{enumerate}
-\item If $a = \dots x$ then $m$ is divisible by $\LM(s_3).$
-\item If $a = \dots xy$ then $m$ is divisible by $\LM(s_1).$
-\item If $a = \dots y^2$ then $m$ is divisible by $\LM(s_4).$
-\item If $a = y,$ we obtain a contradiction \fixmecc{on peut avoir
-  $\underline{y\varepsilon_2}-\varepsilon_2y$, mais c'est une syzygie principale}.
-\item If $a = 1,$ we also obtain a contradiction.
+\item If $a = \dots x$ then $m$ is divisible by $\LM(s_5).$
+%\item If $a = \dots xy$ then $m$ is divisible by $\LM(s_1).$
+\item If $a = \dots y$ then $m$ is divisible by $\LM(s_2).$
+\item If $a = 1,$ then $s = \varepsilon_1 u+  \varepsilon_2 v $ for some polynomials $u,v$ and 
+we get the same contradiction as for $m=\varepsilon_1b.$ 
 \end{enumerate}
 
 In conclusion, the leading monomials in $Syz(f_1,f_2)$
@@ -896,7 +899,8 @@ are of one of the following forms, for some $i=1,2$, $\alpha, \beta \in \left\la
 \begin{itemize}
 \item $\alpha x \varepsilon_i \beta,$
 \item $\alpha xy \varepsilon_i \beta,$
-\item $\alpha y^2 \varepsilon_i \beta,$
+\item $\alpha y^2 \varepsilon_1 \beta,$
+\item $\alpha y \varepsilon_2 \beta,$
 \end{itemize}
 which are all divisible by some $\LM(s_j).$
 This concludes the proof.
