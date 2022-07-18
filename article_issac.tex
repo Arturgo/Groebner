@@ -840,21 +840,16 @@ conditions holds:
 We then have the following fact:
 \begin{itemize}
 \item $s_1=\underline{xy \varepsilon_2}-\varepsilon_2 y^2+ x \varepsilon_1 y^2-y \varepsilon_1 y^2- \varepsilon_1 x y^2 \in Syz(f_1,f_2)$,
-\item $s_2=\underline{xy \varepsilon_1}-yx\varepsilon_1 -  \varepsilon_1 x^2+y
-  \varepsilon_1 xy \in Syz(f_1,f_2)$.
-\fixmecc{j'ai l'impression que ce n'est pas une syzygie. On peut prendre à la
-  place $s_2=\underline{xy\varepsilon_1}-\varepsilon_1yx+x\varepsilon_2-\varepsilon_2x$}  
+\item $s_2=\underline{xy\varepsilon_1}-\varepsilon_1yx+x\varepsilon_2-\varepsilon_2x \in Syz(f_1,f_2)$. 
 \end{itemize}
 In addition, the following are trivial syzygys:
 
 \begin{itemize}
-\item $s_3=\underline{x \varepsilon_1}-y\varepsilon_1- \varepsilon_1 x + \varepsilon_1 y \in Syz(f_1,f_2)$,
-\item $s_4=\underline{y^2 \varepsilon_1}-\varepsilon_2 x +  \varepsilon_2 y \in Syz(f_1,f_2)$.
-\item $s_5=\underline{x \varepsilon_2}-y\varepsilon_2- y^2 \varepsilon_2  \in
+\item $s_3=\underline{x\varepsilon_2}-y\varepsilon_2-\varepsilon_1y^2  \in
   Syz(f_1,f_2)$,
-  \fixmecc{ce ne serait pas plutôt
-    $\underline{x\varepsilon_2}-y\varepsilon_2-\varepsilon_1y^2$?} 
-\item $s_6=\underline{y^2 \varepsilon_2}-\varepsilon_2 y^2 \in Syz(f_1,f_2)$.
+\item $s_4=\underline{y^2 \varepsilon_2}-\varepsilon_2 y^2 \in Syz(f_1,f_2)$,
+\item $s_5=\underline{x \varepsilon_1}-y\varepsilon_1- \varepsilon_1 x + \varepsilon_1 y \in Syz(f_1,f_2)$,
+\item $s_6=\underline{y^2 \varepsilon_1}-\varepsilon_2 x +  \varepsilon_2 y \in Syz(f_1,f_2)$.
 \end{itemize}
 
 We then state that:
@@ -867,9 +862,9 @@ Let $m=a \varepsilon_1 b \in \MM \left( \mathscr{F}_2 \right)$
 be a leading monomial of a syzygy $s$.
 Then we distinguish the following cases.
 \begin{enumerate}
-\item If $a = \dots x$ then $m$ is divisible by $\LM(s_3).$
+\item If $a = \dots x$ then $m$ is divisible by $\LM(s_5).$
 \item If $a = \dots xy$ then $m$ is divisible by $\LM(s_2).$
-\item If $a = \dots y^2$ then $m$ is divisible by $\LM(s_4).$
+\item If $a = \dots y^2$ then $m$ is divisible by $\LM(s_6).$
 \item If $a = y,$ then $s = y \varepsilon_1 u+  \varepsilon_1 v + \varepsilon_2 w$ for some polynomials $u,v,w.$
 Applying $\overline{\cdot}$ (mapping $\varepsilon_i$ to $f_i$), we 
 obtain that $y (x-y) u+  (x-y) v + y^2 w=0.$
@@ -888,9 +883,9 @@ obtain that $u=v=0$ which is a contradiction.
 Similarly, let $m=a \varepsilon_2 b \in \MM \left( \mathscr{F}_2 \right)$
 be a leading monomial of a syzygy $s$. Then:
 \begin{enumerate}
-\item If $a = \dots x$ then $m$ is divisible by $\LM(s_5).$
+\item If $a = \dots x$ then $m$ is divisible by $\LM(s_3).$
 \item If $a = \dots xy$ then $m$ is divisible by $\LM(s_1).$
-\item If $a = \dots y^2$ then $m$ is divisible by $\LM(s_6).$
+\item If $a = \dots y^2$ then $m$ is divisible by $\LM(s_4).$
 \item If $a = y,$ we obtain a contradiction \fixmecc{on peut avoir
   $\underline{y\varepsilon_2}-\varepsilon_2y$, mais c'est une syzygie principale}.
 \item If $a = 1,$ we also obtain a contradiction.
@@ -911,7 +906,7 @@ Non-homogeneous polynomials leading to degree falls
 can certainly expand 
 this example to higher degrees.
 
-\section{Implementation}
+\section{Implementation?}
 
 \bibliographystyle{plain}
 \begin{thebibliography}{99}
